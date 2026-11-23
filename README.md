@@ -17,7 +17,7 @@ A ransomware attack has encrypted a fictional Sungai Petani clinic's appointment
 
 ## Using it
 
-Arrow keys, Space, the on-screen buttons or a swipe move between slides. **N** shows speaker notes, **F** goes full screen, and **1–4** switch roles on the protocol slide. The timer in the bar starts on the first move and turns amber at 8 minutes and red at 10. Each slide has its own link (`#slide-1` to `#slide-17`).
+Arrow keys, Space, the on-screen buttons or a swipe move between slides. **N** shows speaker notes, **F** goes full screen, and **1–4** switch roles on the protocol slide. On the dialogue slide, each click brings in the next speaker before moving on. The timer in the bar starts on the first move and turns amber at 8:00 and red at 9:00 (target 8 to 9 minutes); speaker notes give a time target for every slide. Each slide has its own link (`#slide-1` to `#slide-14`).
 
 The slides follow the assessment's five required parts: main issues (Q1), analysis (Q2–Q3), readings and Malaysian context, solutions and the agreed action record (Q4), and creativity of solutions (Q5 protocols).
 

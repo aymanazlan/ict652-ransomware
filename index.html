@@ -100,6 +100,14 @@ p { margin: 0; }
 .demand .cap { font-size: var(--t-label); color: var(--muted); letter-spacing: .14em; text-transform: uppercase; margin-top: 8px; }
 .ask { font-family: var(--display); font-weight: 700; font-size: clamp(26px, 2.8vw, 54px); color: var(--ink); }
 .ask span { color: var(--amber); }
+.case { font-family: var(--mono); font-size: var(--t-label); letter-spacing: .12em; text-transform: uppercase; color: var(--teal); }
+.crew { font-family: var(--mono); font-size: var(--t-label); color: var(--muted); line-height: 1.7; margin-top: 6px; }
+.minis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; max-width: 1500px; }
+.mini { border-top: 2px solid var(--c, var(--amber)); padding-top: 8px; display: flex; flex-direction: column; gap: 2px; }
+.mini b { font-family: var(--display); font-weight: 800; font-size: clamp(30px, 2.8vw, 56px); line-height: 1; color: var(--c, var(--amber)); text-shadow: 0 0 30px color-mix(in srgb, var(--c, var(--amber)) 40%, transparent); }
+.mini span { font-size: var(--t-small); color: var(--muted); }
+.card .pill { align-self: flex-start; }
+@media (max-width: 1000px) { .minis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 /* cover */
 .members { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(12px, 1.6vw, 28px); max-width: 1500px; }
 .member { border-top: 3px solid var(--c, var(--teal)); padding-top: 12px; }
@@ -213,8 +221,9 @@ nav button:hover { border-color: var(--teal); }
 
 <!-- 0 · ATTENTION GRABBER -->
 <section class="slide center ransom" data-shape="scatter" data-chap="0" data-mode="center" data-name="Opening" data-actors="queue"
- data-notes="Opening remark (attention grabber). Let the screen sit for three seconds, then ask the class: if this were your clinic, with patients waiting outside, would you pay? Hold the answer; that is the dilemma we will negotiate.">
+ data-notes="Target 0:30 · be done by 0:30. Opening remark (attention grabber). Let the screen sit for three seconds, then ask the class: if this were your clinic, with patients waiting outside, would you pay? Hold the answer; that is the dilemma we will negotiate.">
  <div class="wrap narrow" style="align-items:center">
+  <p class="case rv" style="--d:0">ICT652 · Case 19 · Ransomware and Service Continuity at a Malaysian Private Clinic</p>
   <p class="warn rv" style="--d:0">⚠ Security alert · All files encrypted</p>
   <h1 class="glitch rv" style="--d:1" data-text="Your patient records are locked.">Your patient records are locked.</h1>
   <div class="demand rv" style="--d:2">
@@ -222,29 +231,13 @@ nav button:hover { border-color: var(--teal); }
    <div><p class="timer" id="ransomTimer">47:59:59</p><p class="cap">Time left (attacker’s claim)</p></div>
   </div>
   <p class="ask rv" style="--d:3">Patients are waiting outside. <span>Would you pay?</span></p>
- </div>
-</section>
-
-<!-- 1 · TITLE -->
-<section class="slide" data-shape="grid" data-chap="0" data-name="Title" data-actors="roles"
- data-notes="Introduce the case, the group and each member’s stakeholder role. Mention the five parts of the presentation shown at the bottom.">
- <div class="wrap">
-  <p class="chap rv" style="--d:0"><span class="k">ICT652</span> Case Study 19 · Group 3 · Class 6B</p>
-  <h1 class="rv title" style="--d:1">Ransomware and Service Continuity at a <span class="hl">Malaysian Private Clinic</span></h1>
-  <p class="lede rv" style="--d:2">Lecturer: Madam Siti Rafidah binti Muhamat Dawam</p>
-  <div class="members" style="max-width:1080px">
-   <div class="member rv c-amb" style="--d:3; --c:var(--amber)"><b>Arief Najib</b><span>Clinic Owner</span></div>
-   <div class="member rv" style="--d:4; --c:var(--teal)"><b>Muhammad Aiman</b><span>IT Incident Officer</span></div>
-   <div class="member rv" style="--d:5; --c:#7FB8FF"><b>Muhammad Syazwan</b><span>Clinical Operations Rep.</span></div>
-   <div class="member rv" style="--d:6; --c:#C7A6FF"><b>Muhammad Haziq Rahimi</b><span>Patient Representative</span></div>
-  </div>
-  <div class="chapters rv" style="--d:7"><span><b>01</b>Main issues</span><span><b>02</b>Analysis</span><span><b>03</b>Readings &amp; research</span><span><b>04</b>Solutions</span><span><b>05</b>Creativity</span></div>
+  <p class="crew rv" style="--d:4">Group 3 · 6B · Arief Najib · Muhammad Aiman · Muhammad Syazwan · Muhammad Haziq Rahimi<br>Lecturer: Madam Siti Rafidah binti Muhamat Dawam</p>
  </div>
 </section>
 
 <!-- 2 · FACTS / CLAIMS / UNKNOWNS -->
 <section class="slide" data-shape="encrypted" data-chap="1" data-name="The incident" data-wide="0" data-actors="queue"
- data-notes="Q1. Separate what is verified from what the attackers claim and what is still unknown. The encryption is confirmed. The data theft is only a claim.">
+ data-notes="Target 0:35 · be done by 1:05. Q1. Separate what is verified from what the attackers claim and what is still unknown. The encryption is confirmed. The data theft is only a claim.">
  <div class="wrap">
   <p class="chap rv" style="--d:0"><span class="k">01</span> Main issues <span class="q">· Q1</span></p>
   <h2 class="rv" style="--d:1">What we <span class="hl">know</span>, what they <span class="ha">claim</span>, what is <span class="hr">unknown</span></h2>
@@ -258,7 +251,7 @@ nav button:hover { border-color: var(--teal); }
 
 <!-- 3 · DILEMMA -->
 <section class="slide" data-shape="split" data-chap="1" data-name="The dilemma" data-actors="dilemma"
- data-notes="Q1. The core ethical conflict in one line: urgent service and financial survival against honest communication and patient protection.">
+ data-notes="Target 0:25 · be done by 1:30. Q1. The core ethical conflict in one line: urgent service and financial survival against honest communication and patient protection.">
  <div class="wrap">
   <p class="chap rv" style="--d:0"><span class="k">01</span> Main issues <span class="q">· The ethical dilemma</span></p>
   <div class="versus" style="max-width:1120px">
@@ -271,22 +264,22 @@ nav button:hover { border-color: var(--teal); }
 
 <!-- 4 · STAKEHOLDERS -->
 <section class="slide" data-shape="four" data-chap="1" data-name="Stakeholders" data-actors="roles"
- data-notes="Q1. Each member introduces their own role in one sentence: what they want and who they clash with.">
+ data-notes="Target 0:45 · be done by 2:15. Q1. Each member introduces their own role in one sentence: what they want and who they clash with.">
  <div class="wrap">
   <p class="chap rv" style="--d:0"><span class="k">01</span> Main issues <span class="q">· Q1 stakeholders</span></p>
   <h2 class="rv" style="--d:1">Four roles. Four pressures.</h2>
   <div class="grid g2" style="max-width:980px">
-   <div class="card c-amb rv" style="--d:2"><p class="lab">Clinic Owner</p><p class="big">Protect income</p><p class="tx">Wants to reopen fast and protect reputation. <b>Clashes with</b> the patient rep over honesty and with IT over paying.</p></div>
-   <div class="card c-teal rv" style="--d:3"><p class="lab">IT Incident Officer</p><p class="big">Restore safely</p><p class="tx">Wants to contain the attack and test the backup. <b>Clashes with</b> the owner’s demand for a quick fix and a fixed recovery time.</p></div>
-   <div class="card c-blue rv" style="--d:4"><p class="lab">Clinical Operations</p><p class="big">Keep patients safe</p><p class="tx">Wants safe treatment without records. <b>Clashes with</b> pressure to rush consultations to cut delays.</p></div>
-   <div class="card c-vio rv" style="--d:5"><p class="lab">Patient Representative</p><p class="big">Know the truth</p><p class="tx">Wants accurate information and continued care. <b>Clashes with</b> the owner’s “routine maintenance” message.</p></div>
+   <div class="card c-amb rv" style="--d:2"><p class="lab">Clinic Owner · Arief Najib</p><p class="big">Protect income</p><p class="tx">Wants to reopen fast and protect reputation. <b>Clashes with</b> the patient rep over honesty and with IT over paying.</p></div>
+   <div class="card c-teal rv" style="--d:3"><p class="lab">IT Incident Officer · Muhammad Aiman</p><p class="big">Restore safely</p><p class="tx">Wants to contain the attack and test the backup. <b>Clashes with</b> the owner’s demand for a quick fix and a fixed recovery time.</p></div>
+   <div class="card c-blue rv" style="--d:4"><p class="lab">Clinical Operations · Muhammad Syazwan</p><p class="big">Keep patients safe</p><p class="tx">Wants safe treatment without records. <b>Clashes with</b> pressure to rush consultations to cut delays.</p></div>
+   <div class="card c-vio rv" style="--d:5"><p class="lab">Patient Representative · Muhammad Haziq Rahimi</p><p class="big">Know the truth</p><p class="tx">Wants accurate information and continued care. <b>Clashes with</b> the owner’s “routine maintenance” message.</p></div>
   </div>
  </div>
 </section>
 
 <!-- 5 · FRAMEWORKS -->
 <section class="slide" data-shape="split" data-chap="2" data-name="Two frameworks"
- data-notes="Q2. Utilitarianism judges by consequences, duty ethics by duties and rights. Both reject the maintenance lie. On payment, utilitarianism would reconsider only if safe recovery failed and patients faced serious harm; duty ethics resists rewarding criminals.">
+ data-notes="Target 0:40 · be done by 2:55. Q2. Utilitarianism judges by consequences, duty ethics by duties and rights. Both reject the maintenance lie. On payment, utilitarianism would reconsider only if safe recovery failed and patients faced serious harm; duty ethics resists rewarding criminals.">
  <div class="wrap">
   <p class="chap rv" style="--d:0"><span class="k">02</span> Analysis <span class="q">· Q2 ethical frameworks</span></p>
   <h2 class="rv" style="--d:1">Both frameworks reject the cover-up</h2>
@@ -305,7 +298,7 @@ nav button:hover { border-color: var(--teal); }
 
 <!-- 6 · AMANAH -->
 <section class="slide" data-shape="shield" data-chap="2" data-name="Amanah &amp; Ihsan"
- data-notes="Q2. Amanah is not just listed: it changes the decision. It turns honest disclosure from an option into an obligation, and makes the owner carry the cost of safe recovery.">
+ data-notes="Target 0:25 · be done by 3:20. Q2. Amanah is not just listed: it changes the decision. It turns honest disclosure from an option into an obligation, and makes the owner carry the cost of safe recovery.">
  <div class="wrap">
   <p class="chap rv" style="--d:0"><span class="k">02</span> Analysis <span class="q">· Akhlaq values</span></p>
   <h2 class="rv" style="--d:1">Patient records are an <span class="hl">amanah</span>, not the clinic’s asset</h2>
@@ -317,29 +310,9 @@ nav button:hover { border-color: var(--teal); }
  </div>
 </section>
 
-<!-- 7 · OPTIONS -->
-<section class="slide" data-shape="restore" data-chap="2" data-name="Three options" data-actors="it"
- data-notes="Q3. Compare the three alternatives. We combine controlled restoration with temporary manual services and reject immediate payment. Main limitation: the backup is untested.">
- <div class="wrap">
-  <p class="chap rv" style="--d:0"><span class="k">02</span> Analysis <span class="q">· Q3 alternatives</span></p>
-  <h2 class="rv" style="--d:1">Three ways out, one decision</h2>
-  <div class="tw rv" style="--d:2; max-width:1150px">
-   <table>
-    <thead><tr><th>Option</th><th>Benefit</th><th>Risk</th><th>Our call</th></tr></thead>
-    <tbody>
-     <tr style="--r:0"><td>Pay the ransom</td><td>Maybe the fastest way back</td><td>No guarantee of a key or deletion; funds criminals; repeat demands</td><td><span class="pill p-no">Reject now</span></td></tr>
-     <tr style="--r:1"><td>Restore from offline backup</td><td>No reliance on criminals; rebuild clean systems step by step</td><td>Untested for six months; newer records may be lost</td><td><span class="pill p-yes">Recommended</span></td></tr>
-     <tr style="--r:2"><td>Temporary manual services</td><td>Urgent care keeps running</td><td>Missing history raises clinical risk; paper must be protected</td><td><span class="pill p-alt">Run alongside</span></td></tr>
-    </tbody>
-   </table>
-  </div>
-  <p class="src rv" style="--d:3">CyberSecurity Malaysia (2025) · Nelson et al. (2025)</p>
- </div>
-</section>
-
 <!-- 8 · READINGS -->
 <section class="slide" data-shape="helix" data-chap="3" data-name="Malaysian evidence"
- data-notes="Links to readings and additional research. Real Malaysian context: the Sungai Petani hospital system failure, the PDPA breach notification rule, and the Health Ministry incident. These are context, not proof that the fictional case happened.">
+ data-notes="Target 0:30 · be done by 3:50. Links to readings and additional research. Real Malaysian context: the Sungai Petani hospital system failure, the PDPA breach notification rule, and the Health Ministry incident. These are context, not proof that the fictional case happened.">
  <div class="wrap">
   <p class="chap rv" style="--d:0"><span class="k">03</span> Readings &amp; research <span class="q">· Real Malaysian context</span></p>
   <h2 class="rv" style="--d:1">This is not just fiction in Malaysia</h2>
@@ -358,7 +331,7 @@ nav button:hover { border-color: var(--teal); }
 
 <!-- 9 · DIALOGUE -->
 <section class="slide" data-shape="four" data-chap="4" data-name="Stakeholder dialogue" data-actors="dialogue"
- data-notes="Q4 role-play cue. Run the 8 to 10 minute dialogue here. Each member speaks, questions a proposal and responds to a competing view. This slide shows the flow so the class can follow.">
+ data-notes="Target 2:00 · be done by 5:50. Q4 role-play cue. Run the 8 to 10 minute dialogue here. Each member speaks, questions a proposal and responds to a competing view. Each click (or →) brings in the next speaker: the card lights up and that figure steps forward. Four clicks, then the next click moves on.">
  <div class="wrap">
   <p class="chap rv" style="--d:0"><span class="k">04</span> Solutions <span class="q">· Q4 stakeholder dialogue</span></p>
   <h2 class="rv" style="--d:1">The negotiation, live</h2>
@@ -371,27 +344,25 @@ nav button:hover { border-color: var(--teal); }
  </div>
 </section>
 
-<!-- 10 · DECISION -->
+<!-- DECISION (Q3 options + agreement) -->
 <section class="slide" data-shape="restore" data-chap="4" data-name="Our decision" data-actors="care"
- data-notes="Q3 and Q4 agreement. State the decision, then the main limitation and how we manage it.">
+ data-notes="Target 0:35 · be done by 6:25. Q3 and Q4 agreement. One line per option, then the decision and its main limitation.">
  <div class="wrap">
-  <p class="chap rv" style="--d:0"><span class="k">04</span> Solutions <span class="q">· What we agreed</span></p>
+  <p class="chap rv" style="--d:0"><span class="k">04</span> Solutions <span class="q">· Q3 options → what we agreed</span></p>
   <h2 class="rv" style="--d:1">Restore. Keep caring. <span class="hl">Don’t pay now.</span></h2>
-  <div class="split" style="grid-template-columns:1fr; max-width:900px; gap:22px">
-   <ol class="steps">
-    <li class="rv" style="--d:2">Test the backup on clean, isolated devices first</li>
-    <li class="rv" style="--d:3">Triage and paper procedures keep urgent care going</li>
-    <li class="rv" style="--d:4">An honest notice: facts, claims and unknowns</li>
-    <li class="rv" style="--d:5">PDPA breach decision within 72 hours</li>
-   </ol>
-   <div class="card c-amb rv" style="--d:6"><p class="lab">Main limitation</p><p class="big">The backup is untested</p><p class="tx">Test starts <b>within 24 hours</b>. Urgent patients are prioritised or referred. If restoration fails, we review options with specialists, but <b>payment never replaces honest disclosure</b>.</p></div>
+  <div class="grid g3" style="max-width:1150px">
+   <div class="card c-red rv" style="--d:2"><p class="lab">Pay the ransom</p><p class="tx">Maybe fastest, but <b>no guarantee</b> of a key or deletion, and it funds criminals.</p><span class="pill p-no">Reject now</span></div>
+   <div class="card c-teal rv" style="--d:3"><p class="lab">Restore from offline backup</p><p class="tx">No reliance on criminals; <b>rebuild clean systems</b> step by step.</p><span class="pill p-yes">Recommended</span></div>
+   <div class="card c-amb rv" style="--d:4"><p class="lab">Temporary manual services</p><p class="tx">Urgent care <b>keeps running</b> on paper while systems are checked.</p><span class="pill p-alt">Run alongside</span></div>
   </div>
+  <div class="card c-amb rv" style="--d:5; max-width:1150px"><p class="lab">Main limitation · the backup is untested</p><p class="tx">Test starts <b>within 24 hours</b>; urgent patients are prioritised or referred. If restoration fails, we review options with specialists, but <b>payment never replaces honest disclosure</b>.</p></div>
+  <p class="src rv" style="--d:6">CyberSecurity Malaysia (2025) · Nelson et al. (2025)</p>
  </div>
 </section>
 
 <!-- 11 · ACTION RECORD -->
 <section class="slide" data-shape="wall" data-chap="4" data-name="Action record"
- data-notes="Q4 one-page agreed action record: what, who and when.">
+ data-notes="Target 0:30 · be done by 6:55. Q4 one-page agreed action record: what, who and when.">
  <div class="wrap">
   <p class="chap rv" style="--d:0"><span class="k">04</span> Solutions <span class="q">· Q4 agreed action record</span></p>
   <h2 class="rv" style="--d:1">Who does what, by when</h2>
@@ -413,7 +384,7 @@ nav button:hover { border-color: var(--teal); }
 
 <!-- 12 · PAYMENT / PROTECTION / UNRESOLVED -->
 <section class="slide" data-shape="split" data-chap="4" data-name="Open issues" data-actors="unresolved"
- data-notes="The instructions ask the action record to cover the payment concern, protection of those affected and any unresolved disagreement. Here they are.">
+ data-notes="Target 0:25 · be done by 7:20. The instructions ask the action record to cover the payment concern, protection of those affected and any unresolved disagreement. Here they are.">
  <div class="wrap">
   <p class="chap rv" style="--d:0"><span class="k">04</span> Solutions <span class="q">· Q4 record, continued</span></p>
   <h2 class="rv" style="--d:1">The hard parts, answered honestly</h2>
@@ -427,10 +398,10 @@ nav button:hover { border-color: var(--teal); }
 
 <!-- 13 · PROTOCOLS -->
 <section class="slide" data-shape="cross" data-chap="5" data-name="Role protocols"
- data-notes="Q5 creativity. Each member presents their own five-step protocol. Click a role or press 1 to 4 to switch.">
+ data-notes="Target 0:50 · be done by 8:10. Q5 creativity. Each member presents their own five-step protocol. Click a role or press 1 to 4 to switch.">
  <div class="wrap">
   <p class="chap rv" style="--d:0"><span class="k">05</span> Creativity <span class="q">· Q5 individual protocols</span></p>
-  <h2 class="rv" style="--d:1">Every role owns a 5-step protocol</h2>
+  <h2 class="rv" style="--d:1; max-width:none">Every role owns a 5-step protocol</h2>
   <div class="tabs rv" style="--d:2" role="tablist" aria-label="Role protocols">
    <button class="tab" role="tab" id="t0" aria-controls="p0" aria-selected="true" style="--c:var(--amber)">1 · Clinic Owner</button>
    <button class="tab" role="tab" id="t1" aria-controls="p1" aria-selected="false" style="--c:var(--teal)">2 · IT Officer</button>
@@ -463,27 +434,18 @@ nav button:hover { border-color: var(--teal); }
     <tr><td>04</td><td>Never say “everything is safe” before evidence supports it</td><td>Update dates recorded</td></tr>
     <tr><td>05</td><td>A channel to report misuse of personal data</td><td>Reply within 2 working days</td></tr></tbody></table></div>
   </div>
- </div>
-</section>
-
-<!-- 14 · CHECKS -->
-<section class="slide" data-shape="grid" data-chap="5" data-name="Measurable checks"
- data-notes="Q5 creativity: each target has an owner and a record, so the plan can be checked rather than assumed.">
- <div class="wrap">
-  <p class="chap rv" style="--d:0"><span class="k">05</span> Creativity <span class="q">· Proof the plan works</span></p>
-  <h2 class="rv" style="--d:1">Four numbers we hold ourselves to</h2>
-  <div class="stats">
-   <div class="stat rv" style="--d:2; --c:var(--teal)"><span class="n" data-count="24">24</span><span class="u">hours</span><p>Backup test starts; result reported to every role</p></div>
-   <div class="stat rv" style="--d:3; --c:var(--amber)"><span class="n" data-count="72">72</span><span class="u">hours</span><p>PDPA breach-notification decision, documented</p></div>
-   <div class="stat rv" style="--d:4; --c:#7FB8FF"><span class="n" data-count="3">3</span><span class="u">months</span><p>Full restore test and staff training cycle</p></div>
-   <div class="stat rv" style="--d:5; --c:#C7A6FF"><span class="n" data-count="2">2</span><span class="u">working days</span><p>Longest wait for a reply to a patient complaint</p></div>
+  <div class="minis rv" style="--d:4">
+   <div class="mini" style="--c:var(--teal)"><b>24h</b><span>backup test starts</span></div>
+   <div class="mini" style="--c:var(--amber)"><b>72h</b><span>PDPA breach decision</span></div>
+   <div class="mini" style="--c:#7FB8FF"><b>3 mo</b><span>full restore test + training</span></div>
+   <div class="mini" style="--c:#C7A6FF"><b>2 days</b><span>max reply to a patient complaint</span></div>
   </div>
  </div>
 </section>
 
 <!-- 15 · CLOSING -->
 <section class="slide center" data-shape="shield" data-chap="5" data-name="Our position" data-actors="together" data-mode="center"
- data-notes="Close: one sentence, then invite questions.">
+ data-notes="Target 0:10 · be done by 8:20. Close: one sentence, then invite questions.">
  <div class="wrap narrow" style="align-items:center">
   <p class="chap rv" style="--d:0">Group 3 · Our position</p>
   <p class="state rv" style="--d:1">Honesty is part of the <em>recovery.</em></p>
@@ -494,7 +456,7 @@ nav button:hover { border-color: var(--teal); }
 
 <!-- 16 · REFERENCES -->
 <section class="slide" data-shape="grid" data-chap="5" data-name="References"
- data-notes="Full references with links are in the written report.">
+ data-notes="Do not present; stop on the Questions slide. Full references with links are in the written report.">
  <div class="wrap">
   <p class="chap rv" style="--d:0">References · APA 7</p>
   <h2 class="rv" style="--d:1" >Sources</h2>
@@ -520,7 +482,7 @@ nav button:hover { border-color: var(--teal); }
 <nav aria-label="Presentation controls">
  <button id="prev" type="button" aria-label="Previous slide">←</button>
  <div class="rail" id="rail"></div>
- <div class="meta"><span><b id="num">01</b> / <span id="tot">17</span></span><span id="clockWrap" title="Elapsed time since the first move. Amber after 8 minutes, red after 10."><span id="clock">0:00</span></span></div>
+ <div class="meta"><span><b id="num">01</b> / <span id="tot">17</span></span><span id="clockWrap" title="Elapsed time since the first move. Target 8 to 9 minutes: amber at 8:00, red at 9:00."><span id="clock">0:00</span></span></div>
  <button id="fs" type="button" aria-label="Toggle full screen">⛶</button>
  <button id="next" type="button" aria-label="Next slide">Next →</button>
 </nav>
@@ -585,13 +547,27 @@ nav button:hover { border-color: var(--teal); }
     cur = i;
     countUp(s);
     if (scene) scene.morph(s.dataset.shape, s.dataset.actors || 'none');
+    dlgStep = 0; if (typeof setSpeaker === 'function') setSpeaker(-1);
     if (!quiet) { try { history.replaceState(null, '', '#slide-' + (i + 1)); } catch (e) {} }
   }
   function hashIdx() { var m = /^#slide-(\d+)$/.exec(location.hash); return m ? +m[1] - 1 : 0; }
 
   // ---- controls ----
-  document.getElementById('prev').onclick = function () { go(cur - 1); };
-  document.getElementById('next').onclick = function () { go(cur + 1); };
+  var dlgStep = 0;
+  function setSpeaker(k) {
+    document.querySelectorAll('.dlg .card').forEach(function (c, j) { c.classList.toggle('speaking', j === k); });
+    if (scene && scene.setSpeaker) scene.setSpeaker(k);
+  }
+  function stepDialogue(dir) {
+    if (!slides[cur] || !slides[cur].querySelector('.dlg')) return false;
+    var n = dlgStep + dir; if (n < 0 || n > 4) return false;
+    dlgStep = n; setSpeaker(n - 1); return true;
+  }
+  function next() { if (!stepDialogue(1)) go(cur + 1); }
+  function prev() { if (!stepDialogue(-1)) go(cur - 1); }
+  document.querySelectorAll('.dlg .card').forEach(function (c, j) { c.style.cursor = 'pointer'; c.addEventListener('click', function () { dlgStep = j + 1; setSpeaker(j); }); });
+  document.getElementById('prev').onclick = prev;
+  document.getElementById('next').onclick = next;
   document.getElementById('fs').onclick = toggleFs;
   function toggleFs() {
     try { if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(function () {}); else document.exitFullscreen(); } catch (e) {}
@@ -599,8 +575,8 @@ nav button:hover { border-color: var(--teal); }
   window.addEventListener('hashchange', function () { go(hashIdx(), true); });
   document.addEventListener('keydown', function (e) {
     var k = e.key;
-    if (['ArrowRight', 'PageDown', ' ', 'Enter'].indexOf(k) > -1 && !(e.target && e.target.classList && e.target.classList.contains('tab'))) { e.preventDefault(); go(cur + 1); }
-    else if (['ArrowLeft', 'PageUp', 'Backspace'].indexOf(k) > -1) { e.preventDefault(); go(cur - 1); }
+    if (['ArrowRight', 'PageDown', ' ', 'Enter'].indexOf(k) > -1 && !(e.target && e.target.classList && e.target.classList.contains('tab'))) { e.preventDefault(); next(); }
+    else if (['ArrowLeft', 'PageUp', 'Backspace'].indexOf(k) > -1) { e.preventDefault(); prev(); }
     else if (k === 'Home') go(0); else if (k === 'End') go(slides.length - 1);
     else if (k === 'n' || k === 'N') document.getElementById('notes').classList.toggle('show');
     else if (k === 'f' || k === 'F') toggleFs();
@@ -610,7 +586,7 @@ nav button:hover { border-color: var(--teal); }
   document.addEventListener('touchstart', function (e) { tx = e.touches[0].clientX; ty = e.touches[0].clientY; }, { passive: true });
   document.addEventListener('touchend', function (e) {
     if (tx === null) return; var dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
-    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.4) go(cur + (dx < 0 ? 1 : -1)); tx = null;
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.4) (dx < 0 ? next() : prev()); tx = null;
   }, { passive: true });
 
   // protocol tabs
@@ -639,14 +615,11 @@ nav button:hover { border-color: var(--teal); }
     if (started !== null) {
       var el = Math.floor((Date.now() - started) / 1000), ck = document.getElementById('clock');
       ck.textContent = Math.floor(el / 60) + ':' + String(el % 60).padStart(2, '0');
-      ck.className = el >= 600 ? 'over' : el >= 480 ? 'warn' : '';
+      ck.className = el >= 540 ? 'over' : el >= 480 ? 'warn' : '';
     }
   }, 1000);
 
   try { if (window.THREE) scene = buildScene(); } catch (err) { scene = null; if (window.console) console.warn('3D scene off:', err); }
-  if (scene) scene.onSpeaker(function (k) {
-    document.querySelectorAll('.dlg .card').forEach(function (c, j) { c.classList.toggle('speaking', j === k); });
-  });
   go(hashIdx(), true);
 
   // =================== 3D: one thousand patient-record cubes ===================
@@ -796,10 +769,7 @@ nav button:hover { border-color: var(--teal); }
       floorRing.rotation.y = t * .05;
       // scene scripts
       if (actorScene === 'roles' || actorScene === 'dialogue') {
-        if (since > speakNext) {
-          speaker = (speaker + 1) % 4; speakNext = since + (actorScene === 'dialogue' ? 3.8 : 2.2);
-          if (actorScene === 'dialogue' && speakerCb) speakerCb(speaker);
-        }
+        if (actorScene === 'roles' && since > speakNext) { speaker = (speaker + 1) % 4; speakNext = since + 2.2; }
         var ring = [[-2.2, 2.3], [-.75, 3.3], [.75, 3.3], [2.2, 2.3]];
         for (i = 0; i < 4; i++) {
           var p = stake[i], me = i === speaker;
@@ -933,7 +903,7 @@ nav button:hover { border-color: var(--teal); }
       if (composer) composer.render(); else renderer.render(sc, cam);
     }
     frame();
-    return { morph: morph, onSpeaker: function (fn) { speakerCb = fn; } };
+    return { morph: morph, setSpeaker: function (k) { speaker = k; } };
   }
 })();
 </script>
