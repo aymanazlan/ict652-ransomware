@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Case 19 Ransomware Briefing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root {
+  /* Single dark world: a clinic's incident-response room. Layout: full-screen 3D scene, slides float in front and turn in depth. */
+  --bg: #061619;
+  --bg2: #0B2529;
+  --panel: rgba(11, 37, 41, 0.72);
+  --ink: #E9F3F1;
+  --muted: #9DBAB6;
+  --teal: #3FD0B8;
+  --amber: #F2A33A;
+  --threat: #F2665E;
+  --line: rgba(233, 243, 241, 0.14);
+  --display: 'Archivo', 'Arial Narrow', Arial, sans-serif;
+  --body: 'IBM Plex Sans', 'Segoe UI', Arial, sans-serif;
+  --mono: 'IBM Plex Mono', Consolas, 'Courier New', monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); overflow: hidden; }
+#bg { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+.vignette { position: fixed; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse at 70% 40%, transparent 0%, rgba(6,22,25,0.35) 55%, rgba(6,22,25,0.92) 100%); }
+.deck { position: fixed; inset: 0; perspective: 1600px; }
+.slide { position: absolute; inset: 0; padding: clamp(20px, 5vw, 72px) clamp(16px, 6vw, 96px) 110px;
+  display: flex; flex-direction: column; justify-content: center; gap: clamp(14px, 2.2vh, 26px);
+  opacity: 0; pointer-events: none; transform-origin: 50% 50% -400px;
+  transform: rotateY(24deg) translateX(8%) translateZ(-260px);
+  transition: transform 1s cubic-bezier(.2,.8,.2,1), opacity .7s ease; overflow-y: auto; }
+.slide.past { transform: rotateY(-24deg) translateX(-8%) translateZ(-260px); }
+.slide.active { opacity: 1; pointer-events: auto; transform: none; }
+.inner { width: 100%; max-width: 1240px; display: flex; flex-direction: column; gap: clamp(14px, 2.2vh, 26px); }
+.right { align-self: flex-start; }
+.eyebrow { font-family: var(--mono); font-size: 14px; letter-spacing: .14em; text-transform: uppercase; color: var(--teal); display: flex; gap: 12px; align-items: center; }
+.eyebrow b { color: var(--amber); font-weight: 500; }
+h1, h2, h3 { font-family: var(--display); margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(38px, 6.4vw, 92px); line-height: .98; font-weight: 800; font-stretch: 78%; letter-spacing: -.01em; max-width: 15ch; }
+h2 { font-size: clamp(30px, 4.4vw, 62px); line-height: 1.02; font-weight: 750; font-stretch: 82%; max-width: 22ch; }
+h3 { font-size: clamp(19px, 1.7vw, 24px); line-height: 1.2; font-weight: 650; font-stretch: 95%; }
+p { margin: 0; }
+.lede { font-size: clamp(16px, 1.5vw, 21px); line-height: 1.5; color: var(--muted); max-width: 62ch; }
+.src { font-family: var(--mono); font-size: 12.5px; color: var(--muted); letter-spacing: .02em; }
+.grid { display: grid; gap: clamp(12px, 1.6vw, 20px); }
+.g2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.g4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: clamp(14px, 1.6vw, 22px);
+  display: flex; flex-direction: column; gap: 10px; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  transform-style: preserve-3d; transition: transform .25s ease, border-color .25s ease; will-change: transform; }
+.card:hover { border-color: rgba(63, 208, 184, .5); }
+.card.warn { border-left: 3px solid var(--amber); }
+.card.bad { border-left: 3px solid var(--threat); }
+.card.good { border-left: 3px solid var(--teal); }
+.tag, .card .tag { font-family: var(--mono); font-size: 12.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--teal); }
+.card.warn .tag { color: var(--amber); } .card.bad .tag { color: var(--threat); }
+.card p, .card li { font-size: clamp(14px, 1.15vw, 16.5px); line-height: 1.5; color: var(--muted); }
+.card ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; }
+.who, .card .who { font-family: var(--mono); font-size: 13px; color: var(--ink); opacity: .8; }
+.term { font-family: var(--mono); font-size: clamp(12.5px, 1.05vw, 14.5px); line-height: 1.75; background: rgba(3, 12, 14, .78);
+  border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; color: var(--muted); max-width: 720px; }
+.term .r { color: var(--threat); } .term .a { color: var(--amber); } .term .t { color: var(--teal); }
+.cursor { display: inline-block; width: .6em; height: 1em; background: var(--teal); vertical-align: -2px; animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.members { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-top: 8px; max-width: 1100px; }
+.member { border-top: 2px solid var(--amber); padding-top: 10px; }
+.member b { display: block; font-family: var(--display); font-stretch: 90%; font-size: clamp(15px, 1.3vw, 19px); }
+.member span { font-family: var(--mono); font-size: 12.5px; color: var(--muted); }
+.big { font-size: clamp(34px, 5.6vw, 84px); line-height: 1; font-weight: 800; font-stretch: 75%; max-width: 16ch; }
+.versus { display: grid; grid-template-columns: 1fr auto 1fr; gap: clamp(12px, 2vw, 28px); align-items: stretch; max-width: 1100px; }
+.vs { font-family: var(--display); font-weight: 800; font-size: clamp(28px, 3vw, 44px); color: var(--amber); align-self: center; font-stretch: 70%; }
+table { border-collapse: collapse; width: 100%; font-size: clamp(13.5px, 1.1vw, 16px); background: var(--panel); border-radius: 14px; overflow: hidden; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: top; line-height: 1.45; }
+th { font-family: var(--mono); font-size: 12.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--teal); font-weight: 500; background: rgba(3, 12, 14, .5); }
+td { color: var(--muted); } td:first-child { color: var(--ink); font-weight: 500; }
+tr.pick td { background: rgba(63, 208, 184, .08); }
+.pill { display: inline-block; font-family: var(--mono); font-size: 12px; padding: 3px 9px; border-radius: 999px; border: 1px solid currentColor; white-space: nowrap; }
+.pill.no { color: var(--threat); } .pill.yes { color: var(--teal); } .pill.alt { color: var(--amber); }
+.tablewrap { overflow-x: auto; max-width: 1180px; }
+.timeline { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; position: relative; }
+.stat { display: flex; flex-direction: column; gap: 8px; padding-top: 14px; border-top: 1px solid var(--line); }
+.stat .n { font-family: var(--display); font-weight: 800; font-stretch: 70%; font-size: clamp(48px, 6vw, 96px); line-height: .9; color: var(--amber); font-variant-numeric: tabular-nums; }
+.stat .u { font-family: var(--mono); font-size: 13px; color: var(--teal); letter-spacing: .1em; text-transform: uppercase; }
+.stat p { color: var(--muted); font-size: clamp(14px, 1.1vw, 16px); line-height: 1.5; }
+.split { display: grid; grid-template-columns: 1.15fr .85fr; gap: clamp(16px, 2.4vw, 32px); align-items: start; max-width: 1180px; }
+.steps { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; counter-reset: s; }
+.steps li { counter-increment: s; display: grid; grid-template-columns: 38px 1fr; gap: 12px; align-items: start; font-size: clamp(15px, 1.25vw, 18px); line-height: 1.45; color: var(--ink); }
+.steps li::before { content: counter(s, decimal-leading-zero); font-family: var(--mono); color: var(--amber); font-size: 14px; padding-top: 3px; }
+.refs { columns: 2; column-gap: 40px; max-width: 1180px; }
+.refs p { break-inside: avoid; font-size: 14px; line-height: 1.5; color: var(--muted); margin-bottom: 12px; padding-left: 22px; text-indent: -22px; }
+.refs i { color: var(--ink); }
+.unres { font-size: 15px; color: var(--muted); border-left: 3px solid var(--amber); padding: 6px 0 6px 14px; max-width: 900px; }
+.unres b { color: var(--amber); font-weight: 600; }
+/* reveal: content rests visible; on arrival it rises in with a stagger */
+.slide.active .rv { animation: rise .85s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(var(--d, 0) * 90ms + 180ms); }
+@keyframes rise { from { opacity: 0; transform: translateY(26px) rotateX(-14deg); } to { opacity: 1; transform: none; } }
+/* nav */
+nav { position: fixed; left: 0; right: 0; bottom: 0; display: flex; align-items: center; gap: 14px;
+  padding: 14px clamp(16px, 4vw, 40px); background: linear-gradient(transparent, rgba(6,22,25,.92) 45%); z-index: 5; }
+nav button { white-space: nowrap; font: inherit; font-family: var(--mono); font-size: 13px; color: var(--ink); background: rgba(11,37,41,.8); border: 1px solid var(--line);
+  border-radius: 999px; padding: 9px 16px; cursor: pointer; transition: border-color .2s, background .2s; }
+nav button:hover { border-color: var(--teal); }
+nav button:focus-visible, .dot:focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; }
+.dots { display: flex; gap: 6px; flex: 1; justify-content: center; flex-wrap: wrap; }
+.dot { width: 22px; height: 6px; border-radius: 3px; background: var(--line); border: 0; padding: 0; cursor: pointer; transition: background .3s, width .3s; }
+.dot.on { background: var(--teal); width: 38px; }
+.count { font-family: var(--mono); font-size: 13px; color: var(--muted); min-width: 132px; text-align: right; font-variant-numeric: tabular-nums; }
+.count b { color: var(--ink); font-weight: 500; }
+.hint { position: fixed; top: 16px; right: clamp(16px, 4vw, 40px); font-family: var(--mono); font-size: 12px; color: var(--muted); z-index: 5; opacity: .75; }
+@media (max-width: 860px) {
+  .g3, .g4, .members, .timeline { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .split, .versus { grid-template-columns: 1fr; } .vs { justify-self: start; }
+  .refs { columns: 1; }
+  .slide { justify-content: flex-start; padding-top: 56px; }
+  .hint { display: none; }
+}
+@media (max-width: 520px) {
+  .g2, .g3, .g4, .members, .timeline { grid-template-columns: 1fr; }
+  .count { min-width: 0; flex: 1; text-align: center; } .count .nm { display: none; } .dots { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .slide, .slide.past { transform: none !important; transition: opacity .3s; }
+  .slide.active .rv { animation: none; }
+  .cursor { animation: none; }
+}
+</style>
+</head>
+<body>
+<canvas id="bg" aria-hidden="true"></canvas>
+<div class="vignette"></div>
+<p class="hint">← → or swipe to navigate</p>
+
+<main class="deck" id="deck">
+
+<section class="slide" data-scene="network" data-name="Cover" aria-label="Slide 1: Cover">
+ <div class="inner">
+  <p class="eyebrow rv" style="--d:0">ICT652 <b>·</b> Case Study 19 <b>·</b> Group 3 <b>·</b> Class 6B</p>
+  <h1 class="rv" style="--d:1">Ransomware and Service Continuity at a Malaysian Private Clinic</h1>
+  <p class="lede rv" style="--d:2">A stakeholder briefing on paying attackers, protecting patients and telling the truth. Lecturer: Madam Siti Rafidah binti Muhamat Dawam.</p>
+  <div class="members">
+   <div class="member rv" style="--d:3"><b>Arief Najib</b><span>Clinic Owner</span></div>
+   <div class="member rv" style="--d:4"><b>Muhammad Aiman</b><span>IT Incident Officer</span></div>
+   <div class="member rv" style="--d:5"><b>Muhammad Syazwan</b><span>Clinical Operations Rep.</span></div>
+   <div class="member rv" style="--d:6"><b>Muhammad Haziq Rahimi</b><span>Patient Representative</span></div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-scene="lock" data-name="The incident" aria-label="Slide 2: The incident">
+ <div class="inner">
+  <p class="eyebrow rv" style="--d:0">01 <b>·</b> Main issues <b>·</b> The incident</p>
+  <h2 class="rv" style="--d:1">A Sungai Petani clinic is locked out of its own records</h2>
+  <div class="term rv" style="--d:2" aria-label="Incident status">
+   <div>&gt; appointment_system ......... <span class="r">ENCRYPTED</span></div>
+   <div>&gt; patient_records ............ <span class="r">ENCRYPTED</span></div>
+   <div>&gt; ransom_demand .............. <span class="a">RM30,000</span></div>
+   <div>&gt; attacker_claim ............. <span class="a">"records copied" (unverified)</span></div>
+   <div>&gt; offline_backup ............. <span class="t">present · restore untested 6 months</span></div>
+   <div>&gt; paper_procedures ........... <span class="t">available</span> <span class="cursor"></span></div>
+  </div>
+  <div class="grid g3">
+   <div class="card good tilt rv" style="--d:3"><p class="tag">Verified</p><p>Systems are encrypted, RM30,000 is demanded, an untested offline backup exists and paper procedures can be used.</p></div>
+   <div class="card warn tilt rv" style="--d:4"><p class="tag">Claimed by attackers</p><p>Patient records have been copied, and paying will restore access.</p></div>
+   <div class="card bad tilt rv" style="--d:5"><p class="tag">Still unknown</p><p>Whether any data left the clinic, whether the backup is clean, and how long recovery will take.</p></div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-scene="scale" data-name="The dilemma" aria-label="Slide 3: The dilemma">
+ <div class="inner">
+  <p class="eyebrow rv" style="--d:0">02 <b>·</b> The ethical dilemma</p>
+  <div class="versus">
+   <div class="card warn tilt rv" style="--d:1"><p class="tag">Pressure</p><h3>Reopen fast and keep it quiet</h3><p>Urgent care needs and the clinic’s financial survival push toward paying and calling it “routine maintenance”.</p></div>
+   <p class="vs rv" style="--d:2">VS</p>
+   <div class="card good tilt rv" style="--d:3"><p class="tag">Duty</p><h3>Recover safely and tell the truth</h3><p>Truthful communication, patient protection and the uncertain results of paying attackers point the other way.</p></div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-scene="orbit" data-name="Stakeholders" aria-label="Slide 4: Stakeholders">
+ <div class="inner">
+  <p class="eyebrow rv" style="--d:0">03 <b>·</b> Main issues <b>·</b> Four roles</p>
+  <h2 class="rv" style="--d:1">Four roles, four competing pressures</h2>
+  <div class="grid g4">
+   <div class="card tilt rv" style="--d:2"><p class="tag">Clinic Owner</p><p class="who">Arief Najib</p><p>Wants to protect income and reputation. Pushes to pay quickly and call it “routine maintenance”.</p></div>
+   <div class="card tilt rv" style="--d:3"><p class="tag">IT Incident Officer</p><p class="who">Muhammad Aiman</p><p>Wants to contain the attack and restore safely. Pushes to test the backup; no payment without evidence.</p></div>
+   <div class="card tilt rv" style="--d:4"><p class="tag">Clinical Operations</p><p class="who">Muhammad Syazwan</p><p>Wants patients safe while systems are down. Pushes for paper procedures and triage of urgent cases.</p></div>
+   <div class="card tilt rv" style="--d:5"><p class="tag">Patient Representative</p><p class="who">Muhammad Haziq Rahimi</p><p>Wants accurate information and continued care. Pushes for an honest notice and a named contact person.</p></div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-scene="scale" data-name="Two frameworks" aria-label="Slide 5: Two ethical frameworks">
+ <div class="inner">
+  <p class="eyebrow rv" style="--d:0">04 <b>·</b> Analysis <b>·</b> Two ethical frameworks</p>
+  <h2 class="rv" style="--d:1">Both frameworks reject the cover-up</h2>
+  <div class="tablewrap rv" style="--d:2">
+   <table>
+    <thead><tr><th>Decision</th><th>Utilitarianism</th><th>Duty ethics</th><th>Verdict</th></tr></thead>
+    <tbody>
+     <tr><td>Pay the RM30,000 ransom</td><td>Faster reopening, but no guarantee of a working key or deletion of copied data, and it funds criminals</td><td>Relying on criminals’ promises fails the duty to protect patients’ data</td><td><span class="pill no">Do not pay now</span></td></tr>
+     <tr><td>Call it “routine maintenance”</td><td>Short-term calm, then a bigger loss of trust when patients find out</td><td>A deliberate lie, wrong whatever the outcome</td><td><span class="pill yes">Tell the truth</span></td></tr>
+    </tbody>
+   </table>
+  </div>
+  <p class="src rv" style="--d:3">Baase &amp; Henry (2018) · Association for Computing Machinery (2018) · CyberSecurity Malaysia (2025)</p>
+ </div>
+</section>
+
+<section class="slide" data-scene="shield" data-name="Amanah" aria-label="Slide 6: Amanah and Ihsan">
+ <div class="inner">
+  <p class="eyebrow rv" style="--d:0">05 <b>·</b> Analysis <b>·</b> Akhlaq values</p>
+  <h2 class="rv" style="--d:1">Patient records are an amanah, not the clinic’s asset</h2>
+  <div class="grid g2" style="max-width:1000px">
+   <div class="card good tilt rv" style="--d:2"><p class="tag">Amanah</p><h3>Faithfully fulfil a trust</h3><p>Leaders are accountable for those under their care. This rules out the “routine maintenance” message and makes the owner bear the cost of safe recovery.</p></div>
+   <div class="card good tilt rv" style="--d:3"><p class="tag">Ihsan</p><h3>Compassion and excellence in care</h3><p>Patient safety comes before keeping normal operations, so no consultation goes ahead without the information needed to treat safely.</p></div>
+  </div>
+  <p class="src rv" style="--d:4">Jabatan Mufti Wilayah Persekutuan (2024, 2025)</p>
+ </div>
+</section>
+
+<section class="slide" data-scene="network" data-name="Readings" aria-label="Slide 7: Links to readings and research">
+ <div class="inner">
+  <p class="eyebrow rv" style="--d:0">06 <b>·</b> Links to readings and research</p>
+  <h2 class="rv" style="--d:1">Real Malaysian cases and rules behind our answer</h2>
+  <div class="timeline">
+   <div class="card warn tilt rv" style="--d:2"><p class="tag">Aug 2024 · Sungai Petani</p><p>A system failure at Hospital Sultan Abdul Halim forced manual procedures and slowed patient care (Zulkifli, 2024).</p></div>
+   <div class="card good tilt rv" style="--d:3"><p class="tag">1 Jun 2025 · PDPA</p><p>Breach notification became mandatory: notify the PDP Commissioner within 72 hours if significant harm is likely (PDP Commissioner, 2025).</p></div>
+   <div class="card warn tilt rv" style="--d:4"><p class="tag">Nov 2026 · Health Ministry</p><p>A cybersecurity incident at one facility, while patient services continued (Bernama, 2026).</p></div>
+   <div class="card tilt rv" style="--d:5"><p class="tag">MyCERT advisory</p><p>Paying a ransom does not guarantee recovery or deletion of stolen data (CyberSecurity Malaysia, 2025).</p></div>
+   <div class="card tilt rv" style="--d:6"><p class="tag">NIST SP 800-61r3</p><p>Contain the attack, preserve evidence and recover in stages (Nelson et al., 2025).</p></div>
+   <div class="card tilt rv" style="--d:7"><p class="tag">ACM Code of Ethics</p><p>Computing professionals must be honest and avoid harm (Association for Computing Machinery, 2018).</p></div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-scene="backup" data-name="Three options" aria-label="Slide 8: Three options">
+ <div class="inner">
+  <p class="eyebrow rv" style="--d:0">07 <b>·</b> Effective solutions <b>·</b> Three options</p>
+  <h2 class="rv" style="--d:1">Three ways to recover</h2>
+  <div class="tablewrap rv" style="--d:2">
+   <table>
+    <thead><tr><th>Option</th><th>Benefit</th><th>Risk</th><th>Our call</th></tr></thead>
+    <tbody>
+     <tr><td>Pay the RM30,000 ransom</td><td>May restore access fastest</td><td>No guarantee of a key or deletion; funds criminals; may invite repeat demands</td><td><span class="pill no">Reject for now</span></td></tr>
+     <tr class="pick"><td>Controlled restoration from the offline backup</td><td>Recovers without relying on criminals; rebuilds clean systems step by step</td><td>Backup untested for six months; recent records may be lost</td><td><span class="pill yes">Recommended</span></td></tr>
+     <tr class="pick"><td>Temporary manual services</td><td>Keeps urgent care running while systems are checked</td><td>Missing history raises clinical risk; paper records must be protected</td><td><span class="pill alt">Run alongside</span></td></tr>
+    </tbody>
+   </table>
+  </div>
+  <p class="src rv" style="--d:3">CyberSecurity Malaysia (2025) · Nelson et al. (2025)</p>
+ </div>
+</section>
+
+<section class="slide" data-scene="backup" data-name="Recommendation" aria-label="Slide 9: Recommendation">
+ <div class="inner">
+  <p class="eyebrow rv" style="--d:0">08 <b>·</b> Effective solutions <b>·</b> Recommendation</p>
+  <h2 class="rv" style="--d:1">Restore from backup, keep care running, don’t pay now</h2>
+  <div class="split">
+   <ol class="steps">
+    <li class="rv" style="--d:2">Test the backup on clean, isolated devices before reconnecting anything</li>
+    <li class="rv" style="--d:3">Run triage and paper procedures so urgent care continues</li>
+    <li class="rv" style="--d:4">Send patients an honest notice: confirmed facts, attacker claims and unknowns</li>
+    <li class="rv" style="--d:5">Assess PDPA breach notification within 72 hours</li>
+   </ol>
+   <div class="card warn tilt rv" style="--d:6"><p class="tag">Main limitation</p><h3>The backup is untested</h3><p>The backup test starts within 24 hours. Urgent patients are prioritised or referred. If restoration fails, we review options with specialists, but payment never replaces honest disclosure.</p></div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-scene="orbit" data-name="Action record" aria-label="Slide 10: Agreed action record">
+ <div class="inner">
+  <p class="eyebrow rv" style="--d:0">09 <b>·</b> Effective solutions <b>·</b> Agreed action record</p>
+  <h2 class="rv" style="--d:1">Who does what, and by when</h2>
+  <div class="tablewrap rv" style="--d:2">
+   <table>
+    <thead><tr><th>Agreed action</th><th>Responsible</th><th>Deadline</th></tr></thead>
+    <tbody>
+     <tr><td>Disconnect infected computers; keep the ransom message and logs</td><td>IT Incident Officer</td><td>Immediately</td></tr>
+     <tr><td>Test the offline backup before restoring the system</td><td>IT Incident Officer</td><td>Within 24 hours</td></tr>
+     <tr><td>Set up paper forms so essential patient care continues</td><td>Clinical Operations Rep.</td><td>Immediately</td></tr>
+     <tr><td>Tell patients the truth about the cyberattack</td><td>Clinic Owner</td><td>Once facts are verified</td></tr>
+     <tr><td>Check whether patient data was stolen; PDPA assessment</td><td>IT Incident Officer</td><td>Now; decide within 72 hours</td></tr>
+     <tr><td>Review financial risks and recovery progress</td><td>Clinic Owner</td><td>Within 24 hours</td></tr>
+    </tbody>
+   </table>
+  </div>
+  <p class="unres rv" style="--d:3"><b>Still unresolved:</b> the owner may reconsider payment if the backup fails; the IT officer wants specialist advice first.</p>
+ </div>
+</section>
+
+<section class="slide" data-scene="shield" data-name="Protocols" aria-label="Slide 11: Role protocols">
+ <div class="inner">
+  <p class="eyebrow rv" style="--d:0">10 <b>·</b> Creativity of solutions</p>
+  <h2 class="rv" style="--d:1">Each role owns a five-step protocol</h2>
+  <div class="grid g4">
+   <div class="card tilt rv" style="--d:2"><p class="tag">Clinic Owner</p><h3>Honest Incident Decision Guideline</h3><ul><li>Facts in writing before any decision</li><li>Specialist and legal review before payment</li><li>Approve only truthful notices</li></ul><p class="who">Check: signed notice versions</p></div>
+   <div class="card tilt rv" style="--d:3"><p class="tag">IT Incident Officer</p><h3>Containment and Safe Restoration</h3><ul><li>Isolate and preserve evidence</li><li>Verify attacker claims through logs</li><li>Restore only on clean devices</li></ul><p class="who">Check: restore report signed before go-live</p></div>
+   <div class="card tilt rv" style="--d:4"><p class="tag">Clinical Operations</p><h3>Safe Manual Care Continuity</h3><ul><li>Verify identity, allergies and medicines</li><li>Triage urgent cases first</li><li>Second-person check on re-entry</li></ul><p class="who">Check: triage log every shift</p></div>
+   <div class="card tilt rv" style="--d:5"><p class="tag">Patient Rep.</p><h3>Patient Communication and Support</h3><ul><li>Facts, claims and unknowns in every notice</li><li>A working contact line</li><li>A channel to report data misuse</li></ul><p class="who">Check: replies within 2 working days</p></div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-scene="network" data-name="Measurable checks" aria-label="Slide 12: Measurable checks">
+ <div class="inner">
+  <p class="eyebrow rv" style="--d:0">11 <b>·</b> Creativity of solutions <b>·</b> Measurable checks</p>
+  <h2 class="rv" style="--d:1">How we know the plan is working</h2>
+  <div class="grid g4">
+   <div class="stat rv" style="--d:2"><span class="n" data-count="24">24</span><span class="u">hours</span><p>Backup test starts and the result goes to every role</p></div>
+   <div class="stat rv" style="--d:3"><span class="n" data-count="72">72</span><span class="u">hours</span><p>Decision on PDPA breach notification, documented</p></div>
+   <div class="stat rv" style="--d:4"><span class="n" data-count="3">3</span><span class="u">months</span><p>Full restore test, with staff training on suspicious files</p></div>
+   <div class="stat rv" style="--d:5"><span class="n" data-count="2">2</span><span class="u">working days</span><p>Longest wait for a reply to a patient complaint</p></div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-scene="shield-gold" data-name="Our position" aria-label="Slide 13: Our position">
+ <div class="inner">
+  <p class="eyebrow rv" style="--d:0">12 <b>·</b> Our position</p>
+  <h1 class="big rv" style="--d:1">Honesty is part of the recovery.</h1>
+  <p class="lede rv" style="--d:2">Restore safely, keep caring for patients, and tell them the truth, even before every answer is known.</p>
+ </div>
+</section>
+
+<section class="slide" data-scene="network" data-name="References" aria-label="Slide 14: References">
+ <div class="inner">
+  <p class="eyebrow rv" style="--d:0">References <b>·</b> APA 7</p>
+  <h2 class="rv" style="--d:1">Sources</h2>
+  <div class="refs rv" style="--d:2">
+   <p>Association for Computing Machinery. (2018). <i>ACM code of ethics and professional conduct.</i></p>
+   <p>Baase, S., &amp; Henry, T. M. (2018). <i>A gift of fire: Social, legal, and ethical issues for computing technology</i> (5th ed.). Pearson.</p>
+   <p>Bernama. (2026, November 14). Health Ministry’s main systems, services unaffected by cybersecurity incident. <i>The Star.</i></p>
+   <p>CyberSecurity Malaysia. (2025, June 6). <i>MyCERT advisory: Security best practices in protecting against ransomware threats.</i></p>
+   <p>Jabatan Mufti Wilayah Persekutuan. (2024, January 16). <i>Bayan Linnas #287: Responsibilities and priorities of a leader.</i></p>
+   <p>Jabatan Mufti Wilayah Persekutuan. (2025, August 8). <i>Bayan Linnas siri ke-324: Etika pengamal perubatan menurut maqasid al-syariah.</i></p>
+   <p>Nelson, A., Rekhi, S., Souppaya, M., &amp; Scarfone, K. (2025). <i>Incident response recommendations and considerations for cybersecurity risk management</i> (NIST SP 800-61r3). NIST.</p>
+   <p>Personal Data Protection Commissioner. (2025, February 25). <i>Personal data protection guideline: Data breach notification.</i></p>
+   <p>Zulkifli, A. (2024, August 12). Glitch in information system disrupts patient care at Sungai Petani hospital. <i>New Straits Times.</i></p>
+  </div>
+ </div>
+</section>
+
+</main>
+
+<nav aria-label="Slide navigation">
+ <button id="prev" type="button" aria-label="Previous slide">← Prev</button>
+ <div class="dots" id="dots"></div>
+ <span class="count" id="count" aria-live="polite"></span>
+ <button id="next" type="button" aria-label="Next slide">Next →</button>
+</nav>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function () {
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var dotsEl = document.getElementById('dots'), countEl = document.getElementById('count');
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var cur = -1;
+  var sceneApi = null;
+
+  slides.forEach(function (s, i) {
+    var d = document.createElement('button');
+    d.className = 'dot'; d.type = 'button';
+    d.setAttribute('aria-label', 'Go to slide ' + (i + 1) + ': ' + s.dataset.name);
+    d.addEventListener('click', function () { go(i); });
+    dotsEl.appendChild(d);
+  });
+  var dots = dotsEl.children;
+
+  function countUp(slide) {
+    slide.querySelectorAll('[data-count]').forEach(function (el) {
+      var end = +el.dataset.count;
+      if (reduce) { el.textContent = end; return; }
+      var t0 = performance.now(), dur = 1100;
+      (function tick(t) {
+        var p = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(end * e);
+        if (p < 1) requestAnimationFrame(tick);
+      })(t0);
+    });
+  }
+
+  function go(i, fromHash) {
+    i = Math.max(0, Math.min(slides.length - 1, i));
+    if (i === cur) return;
+    slides.forEach(function (s, k) {
+      s.classList.toggle('active', k === i);
+      s.classList.toggle('past', k < i);
+      s.setAttribute('aria-hidden', k === i ? 'false' : 'true');
+      s.inert = k !== i;
+    });
+    for (var k = 0; k < dots.length; k++) dots[k].classList.toggle('on', k === i);
+    countEl.innerHTML = '<b>' + String(i + 1).padStart(2, '0') + '</b> / ' + slides.length + '<span class="nm"> · ' + slides[i].dataset.name + '</span>';
+    cur = i;
+    countUp(slides[i]);
+    if (sceneApi) sceneApi.set(slides[i].dataset.scene, i);
+    if (!fromHash) { try { history.replaceState(null, '', '#slide-' + (i + 1)); } catch (e) {} }
+  }
+
+  function fromHash() {
+    var m = /^#slide-(\d+)$/.exec(location.hash);
+    return m ? (+m[1] - 1) : 0;
+  }
+
+  document.getElementById('prev').addEventListener('click', function () { go(cur - 1); });
+  document.getElementById('next').addEventListener('click', function () { go(cur + 1); });
+  window.addEventListener('hashchange', function () { go(fromHash(), true); });
+  document.addEventListener('keydown', function (e) {
+    if (e.target && /INPUT|TEXTAREA/.test(e.target.tagName)) return;
+    if (['ArrowRight', 'PageDown', ' ', 'Enter'].indexOf(e.key) > -1) { e.preventDefault(); go(cur + 1); }
+    else if (['ArrowLeft', 'PageUp', 'Backspace'].indexOf(e.key) > -1) { e.preventDefault(); go(cur - 1); }
+    else if (e.key === 'Home') go(0);
+    else if (e.key === 'End') go(slides.length - 1);
+  });
+  var tx = null, ty = null;
+  document.addEventListener('touchstart', function (e) { tx = e.touches[0].clientX; ty = e.touches[0].clientY; }, { passive: true });
+  document.addEventListener('touchend', function (e) {
+    if (tx === null) return;
+    var dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.4) go(cur + (dx < 0 ? 1 : -1));
+    tx = null;
+  }, { passive: true });
+
+  // 3D tilt on cards
+  if (!reduce) {
+    document.querySelectorAll('.tilt').forEach(function (c) {
+      c.addEventListener('pointermove', function (e) {
+        var r = c.getBoundingClientRect();
+        var x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+        c.style.transform = 'perspective(800px) rotateX(' + (-y * 9) + 'deg) rotateY(' + (x * 11) + 'deg) translateZ(10px)';
+      });
+      c.addEventListener('pointerleave', function () { c.style.transform = ''; });
+    });
+  }
+
+  // ---------- 3D scene ----------
+  try { if (window.THREE) sceneApi = buildScene(); } catch (err) { sceneApi = null; }
+
+  go(fromHash(), true);
+
+  function buildScene() {
+    var T = THREE;
+    var canvas = document.getElementById('bg');
+    var renderer = new T.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    var scene = new T.Scene();
+    scene.fog = new T.FogExp2(0x061619, 0.045);
+    var camera = new T.PerspectiveCamera(45, 1, 0.1, 100);
+    camera.position.set(0, 0, 11);
+
+    var C = { teal: new T.Color(0x3fd0b8), amber: new T.Color(0xf2a33a), threat: new T.Color(0xf2665e), ink: new T.Color(0xe9f3f1), gold: new T.Color(0xf6c76a) };
+    var objects = {};
+    function mats(color, fill) {
+      return {
+        line: new T.LineBasicMaterial({ color: color.clone(), transparent: true, opacity: 0 }),
+        fill: new T.MeshStandardMaterial({ color: color.clone(), transparent: true, opacity: 0, metalness: .3, roughness: .4, emissive: color.clone(), emissiveIntensity: .25 }),
+        point: new T.PointsMaterial({ color: color.clone(), size: .09, transparent: true, opacity: 0, depthWrite: false }),
+        fillMax: fill || .18
+      };
+    }
+    function reg(name, group, m, baseColor) { group.userData = { m: m, op: 0, target: 0, base: baseColor }; scene.add(group); objects[name] = group; }
+    function edges(geo, m) { return new T.LineSegments(new T.EdgesGeometry(geo, 15), m.line); }
+
+    // Network of clinic devices: nodes on a sphere with links between near neighbours
+    (function () {
+      var m = mats(C.teal), g = new T.Group(), N = 90, R = 3.1, pts = [];
+      for (var i = 0; i < N; i++) {
+        var y = 1 - (i / (N - 1)) * 2, r = Math.sqrt(1 - y * y), th = i * 2.399963;
+        pts.push(new T.Vector3(Math.cos(th) * r * R, y * R, Math.sin(th) * r * R));
+      }
+      var pg = new T.BufferGeometry().setFromPoints(pts);
+      g.add(new T.Points(pg, m.point));
+      var seg = [];
+      for (var a = 0; a < N; a++) for (var b = a + 1; b < N; b++) if (pts[a].distanceTo(pts[b]) < 1.25) seg.push(pts[a], pts[b]);
+      g.add(new T.LineSegments(new T.BufferGeometry().setFromPoints(seg), m.line));
+      var core = new T.Mesh(new T.IcosahedronGeometry(1.1, 1), m.fill); g.add(core); g.add(edges(new T.IcosahedronGeometry(1.1, 1), m));
+      reg('network', g, m, C.teal);
+    })();
+
+    // Padlock: the encrypted records
+    (function () {
+      var m = mats(C.threat, .22), g = new T.Group();
+      var body = new T.BoxGeometry(2.6, 2, .9);
+      var bm = new T.Mesh(body, m.fill); bm.position.y = -.6; g.add(bm);
+      var be = edges(body, m); be.position.y = -.6; g.add(be);
+      var shackle = new T.TorusGeometry(.95, .17, 12, 40, Math.PI);
+      var sm = new T.Mesh(shackle, m.fill); sm.position.y = .4; g.add(sm);
+      var se = edges(shackle, m); se.position.y = .4; g.add(se);
+      [-0.95, 0.95].forEach(function (x) {
+        var leg = new T.CylinderGeometry(.17, .17, .55, 12);
+        var lm = new T.Mesh(leg, m.fill); lm.position.set(x, .15, 0); g.add(lm);
+      });
+      var hole = new T.CylinderGeometry(.18, .18, 1, 16); var hm = new T.Mesh(hole, new T.MeshBasicMaterial({ color: 0x061619 }));
+      hm.rotation.x = Math.PI / 2; hm.position.set(0, -.45, 0); hm.scale.set(1, 1, .95); g.add(hm);
+      g.userData && 0;
+      reg('lock', g, m, C.threat);
+    })();
+
+    // Balance scale: the dilemma and the two frameworks
+    (function () {
+      var m = mats(C.amber, .2), g = new T.Group();
+      var post = new T.CylinderGeometry(.08, .08, 3.4, 10); g.add(new T.Mesh(post, m.fill));
+      var base = new T.CylinderGeometry(1, 1.2, .25, 32); var bm = new T.Mesh(base, m.fill); bm.position.y = -1.8; g.add(bm); var bE = edges(base, m); bE.position.y = -1.8; g.add(bE);
+      var beam = new T.Group(); beam.position.y = 1.6; g.add(beam);
+      var bar = new T.BoxGeometry(4.6, .1, .1); beam.add(new T.Mesh(bar, m.fill));
+      [-2.2, 2.2].forEach(function (x, idx) {
+        var pan = new T.Group(); pan.position.set(x, 0, 0); beam.add(pan);
+        var cord = new T.BufferGeometry().setFromPoints([new T.Vector3(0, 0, 0), new T.Vector3(-.5, -1.3, 0), new T.Vector3(0, 0, 0), new T.Vector3(.5, -1.3, 0)]);
+        pan.add(new T.LineSegments(cord, m.line));
+        var dish = new T.CylinderGeometry(.75, .45, .18, 28, 1, true); var dm = new T.Mesh(dish, m.fill); dm.position.y = -1.35; pan.add(dm);
+        var de = edges(new T.CylinderGeometry(.75, .45, .18, 28), m); de.position.y = -1.35; pan.add(de);
+        pan.userData.side = idx;
+      });
+      g.userData.beam = beam;
+      reg('scale', g, m, C.amber);
+      objects.scale.userData.beam = beam;
+    })();
+
+    // Four stakeholders orbiting one decision
+    (function () {
+      var m = mats(C.teal, .5), g = new T.Group();
+      var center = new T.OctahedronGeometry(.8, 0); g.add(new T.Mesh(center, m.fill)); g.add(edges(center, m));
+      var ring = new T.TorusGeometry(2.8, .012, 6, 120); var rm = new T.Mesh(ring, m.fill); rm.rotation.x = Math.PI / 2; g.add(rm);
+      var sats = [];
+      for (var i = 0; i < 4; i++) {
+        var s = new T.Mesh(new T.SphereGeometry(.32, 20, 16), m.fill);
+        var se = edges(new T.IcosahedronGeometry(.42, 0), m); s.add(se);
+        g.add(s); sats.push(s);
+      }
+      reg('orbit', g, m, C.teal);
+      objects.orbit.userData.sats = sats;
+    })();
+
+    // Backup: stacked database disks
+    (function () {
+      var m = mats(C.teal, .2), g = new T.Group(), disks = [];
+      for (var i = 0; i < 3; i++) {
+        var geo = new T.CylinderGeometry(1.6, 1.6, .7, 40);
+        var d = new T.Group(); d.position.y = (i - 1) * 1.05;
+        d.add(new T.Mesh(geo, m.fill)); d.add(edges(geo, m));
+        g.add(d); disks.push(d);
+      }
+      reg('backup', g, m, C.teal);
+      objects.backup.userData.disks = disks;
+    })();
+
+    // Shield: protection and amanah
+    (function (name, color) {
+      var m = mats(color, .25), g = new T.Group();
+      var s = new T.Shape();
+      s.moveTo(0, 2); s.bezierCurveTo(.9, 1.6, 1.6, 1.7, 1.9, 1.5); s.bezierCurveTo(1.9, -.2, 1.2, -1.4, 0, -2.2);
+      s.bezierCurveTo(-1.2, -1.4, -1.9, -.2, -1.9, 1.5); s.bezierCurveTo(-1.6, 1.7, -.9, 1.6, 0, 2);
+      var geo = new T.ExtrudeGeometry(s, { depth: .35, bevelEnabled: true, bevelThickness: .08, bevelSize: .08, bevelSegments: 2 });
+      geo.center();
+      g.add(new T.Mesh(geo, m.fill)); g.add(edges(geo, m));
+      var tick = new T.BufferGeometry().setFromPoints([new T.Vector3(-.75, .05, .32), new T.Vector3(-.15, -.6, .32), new T.Vector3(-.15, -.6, .32), new T.Vector3(.85, .75, .32)]);
+      g.add(new T.LineSegments(tick, m.line));
+      reg('shield', g, m, color);
+    })('shield', C.teal);
+    (function () {
+      var src = objects.shield, m = mats(C.gold, .3), g = new T.Group();
+      src.children.forEach(function (c) {
+        var mat = c.isLineSegments ? m.line : m.fill;
+        var o = c.isLineSegments ? new T.LineSegments(c.geometry, mat) : new T.Mesh(c.geometry, mat);
+        g.add(o);
+      });
+      g.scale.setScalar(1.12);
+      reg('shield-gold', g, m, C.gold);
+    })();
+
+    // Drifting data packets
+    var PN = 420, ppos = new Float32Array(PN * 3), pvel = [];
+    for (var i = 0; i < PN; i++) {
+      ppos[i * 3] = (Math.random() - .5) * 26; ppos[i * 3 + 1] = (Math.random() - .5) * 16; ppos[i * 3 + 2] = (Math.random() - .5) * 18 - 2;
+      pvel.push(.004 + Math.random() * .012);
+    }
+    var pgeo = new T.BufferGeometry(); pgeo.setAttribute('position', new T.BufferAttribute(ppos, 3));
+    var pmat = new T.PointsMaterial({ color: 0x3fd0b8, size: .045, transparent: true, opacity: .55, depthWrite: false });
+    var packets = new T.Points(pgeo, pmat); scene.add(packets);
+
+    scene.add(new T.AmbientLight(0xffffff, .45));
+    var key = new T.PointLight(0x3fd0b8, 1.4, 40); key.position.set(5, 4, 8); scene.add(key);
+    var rim = new T.PointLight(0xf2a33a, .9, 40); rim.position.set(-6, -3, 4); scene.add(rim);
+
+    var state = { name: 'network', idx: 0, camT: new T.Vector3(0, 0, 11), offX: 2.6, packetColor: new T.Color(0x3fd0b8), threat: 0 };
+    var presets = {
+      'network': { cam: [0, .4, 11], packet: C.teal, threat: 0 },
+      'lock': { cam: [0, 0, 9.5], packet: C.threat, threat: 1 },
+      'scale': { cam: [0, .2, 10.5], packet: C.amber, threat: .3 },
+      'orbit': { cam: [0, 2.4, 10], packet: C.teal, threat: 0 },
+      'backup': { cam: [0, 1.2, 10], packet: C.teal, threat: 0 },
+      'shield': { cam: [0, 0, 9.5], packet: C.teal, threat: 0 },
+      'shield-gold': { cam: [0, 0, 9], packet: C.gold, threat: 0 }
+    };
+
+    function layout() {
+      var w = window.innerWidth, h = window.innerHeight;
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h; camera.updateProjectionMatrix();
+      state.offX = w > 860 ? Math.min(4.2, 2.2 * camera.aspect) : 0;
+      canvas.style.opacity = w > 860 ? 1 : .45;
+    }
+    window.addEventListener('resize', layout); layout();
+
+    var mx = 0, my = 0;
+    window.addEventListener('pointermove', function (e) { mx = e.clientX / window.innerWidth - .5; my = e.clientY / window.innerHeight - .5; });
+
+    function set(name, idx) {
+      state.name = presets[name] ? name : 'network'; state.idx = idx;
+      var p = presets[state.name];
+      state.camT.set(p.cam[0], p.cam[1], p.cam[2]);
+      state.packetColor = p.packet; state.threat = p.threat;
+      Object.keys(objects).forEach(function (k) {
+        objects[k].userData.target = (k === state.name) ? 1 : (k === 'network' && state.name !== 'network' ? .12 : 0);
+        if (k === state.name && !reduce) { objects[k].rotation.y += Math.PI * .5; objects[k].userData.pop = 1; }
+      });
+    }
+
+    var clock = new T.Clock(), visible = true;
+    document.addEventListener('visibilitychange', function () { visible = !document.hidden; });
+    function frame() {
+      requestAnimationFrame(frame);
+      if (!visible) return;
+      var dt = Math.min(clock.getDelta(), .05), t = clock.elapsedTime, spd = reduce ? 0 : 1;
+      Object.keys(objects).forEach(function (k) {
+        var o = objects[k], u = o.userData, m = u.m;
+        u.op += (u.target - u.op) * Math.min(1, dt * 3.2);
+        o.visible = u.op > .01;
+        m.line.opacity = u.op * .85; m.point.opacity = u.op; m.fill.opacity = u.op * m.fillMax;
+        o.position.x += ((k === state.name ? state.offX : state.offX * .6) - o.position.x) * Math.min(1, dt * 2.5);
+        if (u.pop) { u.pop = Math.max(0, u.pop - dt * 1.4); }
+        var s = 1 - (u.pop || 0) * .25; o.scale.setScalar(k === 'shield-gold' ? 1.12 * s : s);
+        o.rotation.y += dt * .22 * spd * (k === state.name ? 1 : .4);
+        o.rotation.x = Math.sin(t * .35) * .12 * spd + my * .25;
+      });
+      // object-specific motion
+      var beam = objects.scale.userData.beam;
+      beam.rotation.z = Math.sin(t * .9) * .16 * spd;
+      beam.children.forEach(function (c) { if (c.isGroup) c.rotation.z = -beam.rotation.z; });
+      objects.orbit.userData.sats.forEach(function (s, i) {
+        var a = t * .45 * spd + i * Math.PI / 2;
+        s.position.set(Math.cos(a) * 2.8, Math.sin(a * 2) * .25, Math.sin(a) * 2.8);
+        s.rotation.y = t * spd;
+      });
+      objects.backup.userData.disks.forEach(function (d, i) {
+        d.position.y = (i - 1) * (1.05 + Math.sin(t * 1.2 + i) * .08 * spd);
+        d.rotation.y = t * (.2 + i * .15) * spd;
+      });
+      var lock = objects.lock;
+      lock.position.y = Math.sin(t * 6) * .03 * spd * state.threat;
+      // packets drift up, tinted by the scene
+      var arr = pgeo.attributes.position.array;
+      for (var i = 0; i < PN; i++) {
+        arr[i * 3 + 1] += pvel[i] * (1 + state.threat * 2) * spd;
+        if (arr[i * 3 + 1] > 8) arr[i * 3 + 1] = -8;
+      }
+      pgeo.attributes.position.needsUpdate = true;
+      pmat.color.lerp(state.packetColor, Math.min(1, dt * 2));
+      key.color.lerp(state.threat > .5 ? C.threat : C.teal, Math.min(1, dt * 2));
+      camera.position.x += ((state.camT.x + mx * 1.2) - camera.position.x) * Math.min(1, dt * 2);
+      camera.position.y += ((state.camT.y - my * .8) - camera.position.y) * Math.min(1, dt * 2);
+      camera.position.z += (state.camT.z - camera.position.z) * Math.min(1, dt * 2);
+      camera.lookAt(state.offX * .45, 0, 0);
+      renderer.render(scene, camera);
+    }
+    frame();
+    return { set: set };
+  }
+})();
+</script>
+</body>
+</html>
