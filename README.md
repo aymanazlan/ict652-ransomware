@@ -17,6 +17,8 @@ A ransomware attack has encrypted a fictional Sungai Petani clinic's appointment
 
 ## Using it
 
-Arrow keys, Space, the on-screen buttons or a swipe move between slides. Each slide has its own link (`#slide-1` to `#slide-14`).
+Arrow keys, Space, the on-screen buttons or a swipe move between slides. **N** shows speaker notes, **F** goes full screen, and **1–4** switch roles on the protocol slide. The timer in the bar starts on the first move and turns amber at 8 minutes and red at 10. Each slide has its own link (`#slide-1` to `#slide-17`).
 
-It is a single `index.html` with no build step. The 3D scene uses three.js r128 from cdnjs, so it needs an internet connection; without it the slides still work without the moving background.
+The slides follow the assessment's five required parts: main issues (Q1), analysis (Q2–Q3), readings and Malaysian context, solutions and the agreed action record (Q4), and creativity of solutions (Q5 protocols).
+
+It is a single `index.html` with no build step. The 3D scene (1,000 instanced "patient record" cubes that morph between shapes, with bloom) uses three.js r128 from cdnjs and jsDelivr, so it needs an internet connection; without it the slides still work without the moving background.
