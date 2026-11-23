@@ -80,6 +80,7 @@ p { margin: 0; }
 .card .tx b { color: var(--ink); font-weight: 600; }
 .card .big { font-family: var(--display); font-size: var(--t-h3); font-weight: 750; line-height: 1.1; color: var(--ink); }
 .c-red { --c: var(--red); } .c-amb { --c: var(--amber); } .c-teal { --c: var(--teal); } .c-blue { --c: #7FB8FF; } .c-vio { --c: #C7A6FF; }
+.card.speaking { border-color: var(--c, var(--teal)); box-shadow: 0 0 0 2px var(--c, var(--teal)), 0 24px 70px -18px var(--c, var(--teal)); transform: translateY(-4px); }
 .card:hover { border-color: color-mix(in srgb, var(--c, var(--teal)) 60%, transparent); box-shadow: 0 20px 60px -20px color-mix(in srgb, var(--c, var(--teal)) 45%, transparent); }
 /* staggered arrival */
 .slide.active .rv { animation: rv 1s cubic-bezier(.16,.84,.24,1) both; animation-delay: calc(var(--d, 0) * 110ms + 250ms); }
@@ -129,7 +130,8 @@ td { color: var(--muted); } td:first-child { color: var(--ink); font-weight: 500
 .chip { font-size: var(--t-small); border: 1px solid var(--line); background: var(--panel); border-radius: 12px; padding: 12px 16px; color: var(--muted); max-width: 46ch; }
 .chip b { color: var(--ink); }
 /* dialogue */
-.dlg { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(14px, 1.6vw, 26px); max-width: 1500px; }
+.dlg { display: grid; grid-template-columns: 1fr; gap: clamp(10px, 1.2vh, 18px); max-width: 860px; }
+.dlg .card { padding-top: clamp(12px, 1.4vh, 20px); padding-bottom: clamp(12px, 1.4vh, 20px); }
 .turn { display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: start; }
 .av { width: clamp(46px, 3.6vw, 70px); height: clamp(46px, 3.6vw, 70px); border-radius: 50%; display: grid; place-items: center; font-family: var(--display); font-weight: 800; font-size: clamp(16px, 1.3vw, 26px);
   color: var(--bg); background: var(--c, var(--teal)); box-shadow: 0 0 26px color-mix(in srgb, var(--c, var(--teal)) 55%, transparent); }
@@ -210,7 +212,7 @@ nav button:hover { border-color: var(--teal); }
 <main class="deck" id="deck">
 
 <!-- 0 · ATTENTION GRABBER -->
-<section class="slide center ransom" data-shape="scatter" data-chap="0" data-mode="center" data-name="Opening"
+<section class="slide center ransom" data-shape="scatter" data-chap="0" data-mode="center" data-name="Opening" data-actors="queue"
  data-notes="Opening remark (attention grabber). Let the screen sit for three seconds, then ask the class: if this were your clinic, with patients waiting outside, would you pay? Hold the answer; that is the dilemma we will negotiate.">
  <div class="wrap narrow" style="align-items:center">
   <p class="warn rv" style="--d:0">⚠ Security alert · All files encrypted</p>
@@ -224,13 +226,13 @@ nav button:hover { border-color: var(--teal); }
 </section>
 
 <!-- 1 · TITLE -->
-<section class="slide" data-shape="grid" data-chap="0" data-name="Title"
+<section class="slide" data-shape="grid" data-chap="0" data-name="Title" data-actors="roles"
  data-notes="Introduce the case, the group and each member’s stakeholder role. Mention the five parts of the presentation shown at the bottom.">
  <div class="wrap">
   <p class="chap rv" style="--d:0"><span class="k">ICT652</span> Case Study 19 · Group 3 · Class 6B</p>
   <h1 class="rv title" style="--d:1">Ransomware and Service Continuity at a <span class="hl">Malaysian Private Clinic</span></h1>
   <p class="lede rv" style="--d:2">Lecturer: Madam Siti Rafidah binti Muhamat Dawam</p>
-  <div class="members">
+  <div class="members" style="max-width:1080px">
    <div class="member rv c-amb" style="--d:3; --c:var(--amber)"><b>Arief Najib</b><span>Clinic Owner</span></div>
    <div class="member rv" style="--d:4; --c:var(--teal)"><b>Muhammad Aiman</b><span>IT Incident Officer</span></div>
    <div class="member rv" style="--d:5; --c:#7FB8FF"><b>Muhammad Syazwan</b><span>Clinical Operations Rep.</span></div>
@@ -241,12 +243,12 @@ nav button:hover { border-color: var(--teal); }
 </section>
 
 <!-- 2 · FACTS / CLAIMS / UNKNOWNS -->
-<section class="slide" data-shape="encrypted" data-chap="1" data-name="The incident"
+<section class="slide" data-shape="encrypted" data-chap="1" data-name="The incident" data-wide="0" data-actors="queue"
  data-notes="Q1. Separate what is verified from what the attackers claim and what is still unknown. The encryption is confirmed. The data theft is only a claim.">
  <div class="wrap">
   <p class="chap rv" style="--d:0"><span class="k">01</span> Main issues <span class="q">· Q1</span></p>
   <h2 class="rv" style="--d:1">What we <span class="hl">know</span>, what they <span class="ha">claim</span>, what is <span class="hr">unknown</span></h2>
-  <div class="grid g3">
+  <div class="grid g3" style="max-width:1150px">
    <div class="card c-teal rv" style="--d:2"><p class="lab">Verified fact</p><p class="big">Systems are encrypted</p><p class="tx">Appointment and patient-record systems are locked. RM30,000 is demanded. An offline backup exists but was <b>not tested for six months</b>. Paper procedures are possible.</p></div>
    <div class="card c-amb rv" style="--d:3"><p class="lab">Attacker claim</p><p class="big">“We copied your records”</p><p class="tx">The attackers say they copied patient records and that paying will restore access. <b>Neither is proven.</b></p></div>
    <div class="card c-red rv" style="--d:4"><p class="lab">Still unknown</p><p class="big">How much data left?</p><p class="tx">No confirmed evidence of data extraction. We do not know if the backup is clean or how long recovery will take.</p></div>
@@ -255,11 +257,11 @@ nav button:hover { border-color: var(--teal); }
 </section>
 
 <!-- 3 · DILEMMA -->
-<section class="slide" data-shape="split" data-chap="1" data-name="The dilemma"
+<section class="slide" data-shape="split" data-chap="1" data-name="The dilemma" data-actors="dilemma"
  data-notes="Q1. The core ethical conflict in one line: urgent service and financial survival against honest communication and patient protection.">
  <div class="wrap">
   <p class="chap rv" style="--d:0"><span class="k">01</span> Main issues <span class="q">· The ethical dilemma</span></p>
-  <div class="versus">
+  <div class="versus" style="max-width:1120px">
    <div class="card c-amb rv" style="--d:1"><p class="lab">Pressure</p><p class="big">Reopen fast. Keep it quiet.</p><p class="tx">Urgent care needs and the clinic’s finances push toward paying and calling it <b>“routine maintenance”</b>.</p></div>
    <p class="vs rv" style="--d:2">VS</p>
    <div class="card c-teal rv" style="--d:3"><p class="lab">Duty</p><p class="big">Recover safely. Tell the truth.</p><p class="tx">Patients need <b>accurate information</b>, protection of their data and continued care, and payment may not even work.</p></div>
@@ -268,12 +270,12 @@ nav button:hover { border-color: var(--teal); }
 </section>
 
 <!-- 4 · STAKEHOLDERS -->
-<section class="slide" data-shape="four" data-chap="1" data-name="Stakeholders"
+<section class="slide" data-shape="four" data-chap="1" data-name="Stakeholders" data-actors="roles"
  data-notes="Q1. Each member introduces their own role in one sentence: what they want and who they clash with.">
  <div class="wrap">
   <p class="chap rv" style="--d:0"><span class="k">01</span> Main issues <span class="q">· Q1 stakeholders</span></p>
   <h2 class="rv" style="--d:1">Four roles. Four pressures.</h2>
-  <div class="grid g4">
+  <div class="grid g2" style="max-width:980px">
    <div class="card c-amb rv" style="--d:2"><p class="lab">Clinic Owner</p><p class="big">Protect income</p><p class="tx">Wants to reopen fast and protect reputation. <b>Clashes with</b> the patient rep over honesty and with IT over paying.</p></div>
    <div class="card c-teal rv" style="--d:3"><p class="lab">IT Incident Officer</p><p class="big">Restore safely</p><p class="tx">Wants to contain the attack and test the backup. <b>Clashes with</b> the owner’s demand for a quick fix and a fixed recovery time.</p></div>
    <div class="card c-blue rv" style="--d:4"><p class="lab">Clinical Operations</p><p class="big">Keep patients safe</p><p class="tx">Wants safe treatment without records. <b>Clashes with</b> pressure to rush consultations to cut delays.</p></div>
@@ -316,12 +318,12 @@ nav button:hover { border-color: var(--teal); }
 </section>
 
 <!-- 7 · OPTIONS -->
-<section class="slide" data-shape="restore" data-chap="2" data-name="Three options"
+<section class="slide" data-shape="restore" data-chap="2" data-name="Three options" data-actors="it"
  data-notes="Q3. Compare the three alternatives. We combine controlled restoration with temporary manual services and reject immediate payment. Main limitation: the backup is untested.">
  <div class="wrap">
   <p class="chap rv" style="--d:0"><span class="k">02</span> Analysis <span class="q">· Q3 alternatives</span></p>
   <h2 class="rv" style="--d:1">Three ways out, one decision</h2>
-  <div class="tw rv" style="--d:2">
+  <div class="tw rv" style="--d:2; max-width:1150px">
    <table>
     <thead><tr><th>Option</th><th>Benefit</th><th>Risk</th><th>Our call</th></tr></thead>
     <tbody>
@@ -355,7 +357,7 @@ nav button:hover { border-color: var(--teal); }
 </section>
 
 <!-- 9 · DIALOGUE -->
-<section class="slide" data-shape="four" data-chap="4" data-name="Stakeholder dialogue"
+<section class="slide" data-shape="four" data-chap="4" data-name="Stakeholder dialogue" data-actors="dialogue"
  data-notes="Q4 role-play cue. Run the 8 to 10 minute dialogue here. Each member speaks, questions a proposal and responds to a competing view. This slide shows the flow so the class can follow.">
  <div class="wrap">
   <p class="chap rv" style="--d:0"><span class="k">04</span> Solutions <span class="q">· Q4 stakeholder dialogue</span></p>
@@ -370,12 +372,12 @@ nav button:hover { border-color: var(--teal); }
 </section>
 
 <!-- 10 · DECISION -->
-<section class="slide" data-shape="restore" data-chap="4" data-name="Our decision"
+<section class="slide" data-shape="restore" data-chap="4" data-name="Our decision" data-actors="care"
  data-notes="Q3 and Q4 agreement. State the decision, then the main limitation and how we manage it.">
  <div class="wrap">
   <p class="chap rv" style="--d:0"><span class="k">04</span> Solutions <span class="q">· What we agreed</span></p>
   <h2 class="rv" style="--d:1">Restore. Keep caring. <span class="hl">Don’t pay now.</span></h2>
-  <div class="split">
+  <div class="split" style="grid-template-columns:1fr; max-width:900px; gap:22px">
    <ol class="steps">
     <li class="rv" style="--d:2">Test the backup on clean, isolated devices first</li>
     <li class="rv" style="--d:3">Triage and paper procedures keep urgent care going</li>
@@ -410,12 +412,12 @@ nav button:hover { border-color: var(--teal); }
 </section>
 
 <!-- 12 · PAYMENT / PROTECTION / UNRESOLVED -->
-<section class="slide" data-shape="split" data-chap="4" data-name="Open issues"
+<section class="slide" data-shape="split" data-chap="4" data-name="Open issues" data-actors="unresolved"
  data-notes="The instructions ask the action record to cover the payment concern, protection of those affected and any unresolved disagreement. Here they are.">
  <div class="wrap">
   <p class="chap rv" style="--d:0"><span class="k">04</span> Solutions <span class="q">· Q4 record, continued</span></p>
   <h2 class="rv" style="--d:1">The hard parts, answered honestly</h2>
-  <div class="grid g3">
+  <div class="grid g3" style="max-width:1150px">
    <div class="card c-amb rv" style="--d:2"><p class="lab">Payment concern</p><p class="big">No ransom without review</p><p class="tx">No payment until the backup result and <b>specialist advice</b> are in. The owner reviews financial risk within 24 hours.</p></div>
    <div class="card c-teal rv" style="--d:3"><p class="lab">Protecting patients</p><p class="big">Truth plus care</p><p class="tx">Urgent cases first, a named contact person, regular updates, and the <b>PDP Commissioner and patients told</b> if the breach is notifiable.</p></div>
    <div class="card c-red rv" style="--d:4"><p class="lab">Still unresolved</p><p class="big">If the backup fails…</p><p class="tx">The owner may reconsider payment. The IT officer insists on <b>specialist advice first</b>. We record this openly.</p></div>
@@ -480,7 +482,7 @@ nav button:hover { border-color: var(--teal); }
 </section>
 
 <!-- 15 · CLOSING -->
-<section class="slide center" data-shape="shield" data-chap="5" data-name="Our position" data-mode="center"
+<section class="slide center" data-shape="shield" data-chap="5" data-name="Our position" data-actors="together" data-mode="center"
  data-notes="Close: one sentence, then invite questions.">
  <div class="wrap narrow" style="align-items:center">
   <p class="chap rv" style="--d:0">Group 3 · Our position</p>
@@ -582,7 +584,7 @@ nav button:hover { border-color: var(--teal); }
     document.getElementById('notesText').textContent = s.dataset.notes || '';
     cur = i;
     countUp(s);
-    if (scene) scene.morph(s.dataset.shape);
+    if (scene) scene.morph(s.dataset.shape, s.dataset.actors || 'none');
     if (!quiet) { try { history.replaceState(null, '', '#slide-' + (i + 1)); } catch (e) {} }
   }
   function hashIdx() { var m = /^#slide-(\d+)$/.exec(location.hash); return m ? +m[1] - 1 : 0; }
@@ -642,6 +644,9 @@ nav button:hover { border-color: var(--teal); }
   }, 1000);
 
   try { if (window.THREE) scene = buildScene(); } catch (err) { scene = null; if (window.console) console.warn('3D scene off:', err); }
+  if (scene) scene.onSpeaker(function (k) {
+    document.querySelectorAll('.dlg .card').forEach(function (c, j) { c.classList.toggle('speaking', j === k); });
+  });
   go(hashIdx(), true);
 
   // =================== 3D: one thousand patient-record cubes ===================
@@ -707,6 +712,149 @@ nav button:hover { border-color: var(--teal); }
     for (var i = 0; i < N; i++) { curCol.push(shapes.grid.col[i].clone()); fromCol.push(curCol[i].clone()); rotV[i * 3] = (rnd(i + 21) - .5) * 2; rotV[i * 3 + 1] = (rnd(i + 22) - .5) * 2; rotV[i * 3 + 2] = (rnd(i + 23) - .5) * 2; }
     var dummy = new T.Object3D(), tmpC = new T.Color();
 
+    // ---------- stylised people: stakeholders and patients ----------
+    var FLOOR = -3.05, actorsOn = false, lookY = 0, speakerCb = null, actorScene = 'none', sceneT0 = 0;
+    var people = [], stake = [], patients = [];
+    var PALE = new T.Color(0xd5e2df);
+    function limb(r1, r2, len, m) { var piv = new T.Group(), c = new T.Mesh(new T.CylinderGeometry(r1, r2, len, 10), m); c.position.y = -len / 2; piv.add(c); return piv; }
+    function makePerson(color, isPatient) {
+      var g = new T.Group(), body = new T.Group();
+      var m = new T.MeshBasicMaterial({ color: color.clone().multiplyScalar(isPatient ? .85 : 1.0) });
+      var m2 = new T.MeshBasicMaterial({ color: color.clone().multiplyScalar(isPatient ? .55 : .62) });
+      var torso = new T.Mesh(new T.CylinderGeometry(.25, .19, .66, 14), m); torso.position.y = 1.02; body.add(torso);
+      var hips = new T.Mesh(new T.SphereGeometry(.19, 12, 8), m2); hips.position.y = .7; hips.scale.y = .6; body.add(hips);
+      var neckHead = new T.Group(); neckHead.position.y = 1.38; body.add(neckHead);
+      var head = new T.Mesh(new T.SphereGeometry(.17, 18, 14), m); head.position.y = .16; neckHead.add(head);
+      var armL = limb(.06, .05, .56, m2), armR = limb(.06, .05, .56, m2);
+      armL.position.set(-.31, 1.3, 0); armR.position.set(.31, 1.3, 0); body.add(armL); body.add(armR);
+      var legL = limb(.075, .06, .68, m2), legR = limb(.075, .06, .68, m2);
+      legL.position.set(-.11, .7, 0); legR.position.set(.11, .7, 0); body.add(legL); body.add(legR);
+      var clip = new T.Mesh(new T.BoxGeometry(.22, .3, .03), new T.MeshBasicMaterial({ color: 0xf1f6f4 }));
+      clip.position.set(0, -.5, .12); clip.rotation.x = -.5; clip.visible = false; armR.add(clip);
+      var halo = new T.Mesh(new T.RingGeometry(.3, .36, 32), new T.MeshBasicMaterial({ color: color, transparent: true, opacity: isPatient ? .25 : .7, side: T.DoubleSide }));
+      halo.rotation.x = -Math.PI / 2; halo.position.y = .01; g.add(halo);
+      g.add(body);
+      g.scale.setScalar(.001); g.visible = false;
+      var p = { g: g, body: body, head: neckHead, armL: armL, armR: armR, legL: legL, legR: legR, clip: clip, halo: halo,
+        tx: 0, tz: 0, face: 0, mode: 'idle', vis: false, s: 0, ph: Math.random() * 6, walk: 0, after: null };
+      actorRoot.add(g); people.push(p); return p;
+    }
+    var actorRoot = new T.Group(); actorRoot.position.y = FLOOR; sc.add(actorRoot);
+    var floorRing = new T.PolarGridHelper(5.2, 12, 5, 64, 0x2fe0c2, 0x2fe0c2);
+    floorRing.material.transparent = true; floorRing.material.opacity = 0; floorRing.position.set(0, .005, 1.6); actorRoot.add(floorRing);
+    [COL.amber, COL.teal, COL.blue, COL.vio].forEach(function (c) { stake.push(makePerson(c, false)); });
+    var PN_ = small ? 3 : 5;
+    for (var pi = 0; pi < PN_; pi++) patients.push(makePerson(PALE, true));
+
+    function place(p, x, z, face, mode, enterFrom) {
+      if (!p.vis) { p.g.position.set(x + (enterFrom || 3.2), 0, z); p.g.rotation.y = -Math.PI / 2; }
+      p.vis = true; p.tx = x; p.tz = z; p.face = face; p.mode = mode || 'idle'; p.after = null;
+    }
+    function hideAll() { people.forEach(function (p) { p.vis = false; }); }
+    function faceTo(x1, z1, x2, z2) { return Math.atan2(x2 - x1, z2 - z1); }
+    var careSlots = [], careStep = 0, careNext = 0, speaker = 0, speakNext = 0;
+
+    function setActors(name) {
+      actorScene = name; sceneT0 = clock.getElapsedTime(); hideAll(); actorsOn = name !== 'none';
+      stake.forEach(function (p) { p.clip.visible = false; });
+      if (speakerCb) speakerCb(-1);
+      var S = stake, P = patients, i;
+      if (name === 'queue') {
+        for (i = 0; i < P.length; i++) place(P[i], 1.2 + i * .68, 3.1 + (i % 2) * .25, -Math.PI / 2 + (i % 2 ? .2 : -.1), 'wait', 4);
+      } else if (name === 'roles') {
+        var xs = [-2.3, -.78, .78, 2.3];
+        for (i = 0; i < 4; i++) place(S[i], xs[i], 2.9 - Math.abs(xs[i]) * .18, 0, 'idle', 0);
+        speakNext = 0; speaker = -1;
+      } else if (name === 'dilemma') {
+        place(S[0], -1.9, 2.6, Math.PI / 2, 'talk', -4); place(S[3], 1.9, 2.6, -Math.PI / 2, 'idle', 4);
+      } else if (name === 'unresolved') {
+        place(S[0], -1.9, 2.6, Math.PI / 2, 'talk', -4); place(S[1], 1.9, 2.6, -Math.PI / 2, 'idle', 4);
+      } else if (name === 'it') {
+        place(S[1], 2.3, 2.1, -Math.PI * .7, 'type', 4);
+      } else if (name === 'dialogue') {
+        var ring = [[-2.2, 2.3], [-.75, 3.3], [.75, 3.3], [2.2, 2.3]];
+        for (i = 0; i < 4; i++) place(S[i], ring[i][0], ring[i][1], faceTo(ring[i][0], ring[i][1], 0, 1.6), 'idle', ring[i][0] < 0 ? -4 : 4);
+        speaker = -1; speakNext = 0;
+      } else if (name === 'care') {
+        place(S[2], -.6, 2.7, Math.PI / 2, 'clip', -4); S[2].clip.visible = true;
+        place(S[1], 2.6, 1.4, -Math.PI * .75, 'type', 4);
+        careSlots = []; for (i = 0; i < P.length; i++) careSlots.push(i);
+        for (i = 0; i < P.length; i++) place(P[i], .6 + i * .75, 2.8, -Math.PI / 2, 'wait', 4);
+        careNext = 2.4; careStep = 0;
+      } else if (name === 'together') {
+        var pos = [[-6.4, 1.6], [-5.3, 2.1], [5.3, 2.1], [6.4, 1.6]];
+        for (i = 0; i < 4; i++) place(S[i], pos[i][0], pos[i][1], pos[i][0] < 0 ? .5 : -.5, 'wave', pos[i][0] < 0 ? -3 : 3);
+        for (i = 0; i < Math.min(4, P.length); i++) place(P[i], (i < 2 ? -1 : 1) * (4.2 + (i % 2) * 1.2), .6, i < 2 ? .4 : -.4, 'idle', i < 2 ? -3 : 3);
+      }
+    }
+
+    function updateActors(t) {
+      var since = t - sceneT0, k = reduce ? 0 : 1, i;
+      actorRoot.position.x = groupX + (document.body.classList.contains('center-mode') ? 0 : 2.0 * Math.min(1, offX / 4));
+      var nowMs = performance.now(), fdt = Math.min(.05, (nowMs - (updateActors.last || nowMs)) / 1000); updateActors.last = nowMs;
+      floorRing.material.opacity += ((actorsOn ? .16 : 0) - floorRing.material.opacity) * .05;
+      floorRing.rotation.y = t * .05;
+      // scene scripts
+      if (actorScene === 'roles' || actorScene === 'dialogue') {
+        if (since > speakNext) {
+          speaker = (speaker + 1) % 4; speakNext = since + (actorScene === 'dialogue' ? 3.8 : 2.2);
+          if (actorScene === 'dialogue' && speakerCb) speakerCb(speaker);
+        }
+        var ring = [[-2.2, 2.3], [-.75, 3.3], [.75, 3.3], [2.2, 2.3]];
+        for (i = 0; i < 4; i++) {
+          var p = stake[i], me = i === speaker;
+          if (actorScene === 'dialogue') {
+            var bx = ring[i][0], bz = ring[i][1];
+            p.tx = me ? bx * .78 : bx; p.tz = me ? bz - .55 : bz; p.mode = me ? 'talk' : 'idle';
+            var sp = stake[speaker]; p.face = me ? faceTo(p.tx, p.tz, 0, 6) : faceTo(bx, bz, sp ? sp.tx : 0, sp ? sp.tz : 1.6);
+          } else { p.mode = me ? 'wave' : 'idle'; }
+        }
+      } else if (actorScene === 'care') {
+        if (since > careNext) {
+          careNext = since + 2.6; var P = patients, first = careSlots.shift();
+          P[first].tx = -3.4; P[first].tz = 2.2; P[first].face = -Math.PI / 2; P[first].mode = 'idle';
+          P[first].after = { x: .6 + (P.length - 1) * .75, z: 2.8 };
+          careSlots.push(first);
+          careSlots.forEach(function (idx, j) { if (idx !== first) { P[idx].tx = .6 + j * .75; P[idx].tz = 2.8; P[idx].face = -Math.PI / 2; P[idx].mode = 'wait'; } });
+        }
+      }
+      for (i = 0; i < people.length; i++) {
+        var q = people[i], g = q.g;
+        q.s += ((q.vis ? 1 : 0) - q.s) * .08;
+        g.visible = q.s > .02; if (!g.visible) continue;
+        g.scale.setScalar(Math.max(.001, q.s));
+        var dx = q.tx - g.position.x, dz = q.tz - g.position.z, dist = Math.sqrt(dx * dx + dz * dz), moving = dist > .06;
+        if (moving) {
+          var stepLen = Math.min(dist, 2.3 * fdt);
+          g.position.x += dx / dist * stepLen; g.position.z += dz / dist * stepLen;
+          var heading = Math.atan2(dx, dz); g.rotation.y += angDiff(heading, g.rotation.y) * .2;
+          q.walk += stepLen * 6.5;
+        } else {
+          g.rotation.y += angDiff(q.face, g.rotation.y) * .08;
+          if (q.after) { // walked out: reappear at the back of the queue
+            g.position.set(q.after.x + 3, 0, q.after.z); q.s = 0; q.tx = q.after.x; q.tz = q.after.z; q.face = -Math.PI / 2; q.mode = 'wait'; q.after = null;
+          }
+        }
+        var w = moving ? Math.sin(q.walk) : 0;
+        q.legL.rotation.x = w * .6 * k; q.legR.rotation.x = -w * .6 * k;
+        q.body.position.y = moving ? Math.abs(Math.cos(q.walk)) * .05 * k : Math.sin(t * 1.6 + q.ph) * .015 * k;
+        var aL = -w * .5, aR = w * .5, zL = .08, zR = -.08, hx = 0, hy = 0;
+        if (!moving) {
+          if (q.mode === 'talk') { aR = -1.2 + Math.sin(t * 5 + q.ph) * .35; aL = -.3 + Math.sin(t * 3.3) * .2; hx = Math.sin(t * 4) * .08; }
+          else if (q.mode === 'wave') { zR = -2.5 + Math.sin(t * 6 + q.ph) * .3; aR = 0; }
+          else if (q.mode === 'type') { aL = -1.05 + Math.sin(t * 14 + q.ph) * .08; aR = -1.05 + Math.cos(t * 13 + q.ph) * .08; hx = .25; }
+          else if (q.mode === 'clip') { aR = -1.15; zR = .25; aL = -.9 + Math.sin(t * 9) * .1; zL = -.35; hx = .3; }
+          else if (q.mode === 'wait') { var c = (t + q.ph * 3) % 7; if (c < 1.4) { aL = -1.3; zL = .7; hx = .35; hy = .3; } q.body.rotation.z = Math.sin(t * 1.1 + q.ph) * .04 * k; }
+          else { aL = Math.sin(t * 1.4 + q.ph) * .05; aR = -aL; hy = Math.sin(t * .7 + q.ph) * .15; }
+        }
+        q.armL.rotation.x += (aL * k - q.armL.rotation.x) * .2; q.armR.rotation.x += (aR * k - q.armR.rotation.x) * .2;
+        q.armL.rotation.z += (zL - q.armL.rotation.z) * .2; q.armR.rotation.z += (zR * (k || .2) - q.armR.rotation.z) * .2;
+        q.head.rotation.x += (hx * k - q.head.rotation.x) * .15; q.head.rotation.y += (hy * k - q.head.rotation.y) * .15;
+        q.halo.material.opacity = (q.mode === 'talk' && !moving ? .95 : (patients.indexOf(q) > -1 ? .25 : .6)) * Math.min(1, q.s);
+      }
+    }
+    function angDiff(a, b) { var d = a - b; while (d > Math.PI) d -= Math.PI * 2; while (d < -Math.PI) d += Math.PI * 2; return d; }
+
     var composer = null, bloom = null;
     if (T.EffectComposer && T.UnrealBloomPass && !small) {
       composer = new T.EffectComposer(renderer);
@@ -724,7 +872,8 @@ nav button:hover { border-color: var(--teal); }
     window.addEventListener('resize', layout); layout();
     var mx = 0, my = 0; window.addEventListener('pointermove', function (e) { mx = e.clientX / innerWidth - .5; my = e.clientY / innerHeight - .5; });
 
-    function morph(name) {
+    function morph(name, actorScene) {
+      setActors(actorScene || 'none');
       if (!shapes[name]) name = 'grid';
       fromPos.set(curPos); for (var i = 0; i < N; i++) fromCol[i].copy(curCol[i]);
       target = shapes[name]; preset = scenePreset[name]; shapeName = name; tStart = clock.getElapsedTime();
@@ -776,13 +925,15 @@ nav button:hover { border-color: var(--teal); }
       cam.position.y += (preset.y - my * 1.4 - cam.position.y) * .04;
       cam.position.z += (preset.z - cam.position.z) * .04;
       if (preset.shake && !reduce) { cam.position.x += (Math.random() - .5) * .03; cam.position.y += (Math.random() - .5) * .03; }
-      cam.lookAt(groupX * .55, 0, 0);
+      lookY += ((actorsOn ? -.9 : 0) - lookY) * .04;
+      cam.lookAt(groupX * .55, lookY, 0);
+      updateActors(t);
       flash = Math.max(0, flash - .02);
       if (bloom) bloom.strength = .55 + flash * .5 + (shapeName === 'encrypted' ? .2 : 0);
       if (composer) composer.render(); else renderer.render(sc, cam);
     }
     frame();
-    return { morph: morph };
+    return { morph: morph, onSpeaker: function (fn) { speakerCb = fn; } };
   }
 })();
 </script>

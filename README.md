@@ -21,4 +21,4 @@ Arrow keys, Space, the on-screen buttons or a swipe move between slides. **N** s
 
 The slides follow the assessment's five required parts: main issues (Q1), analysis (Q2–Q3), readings and Malaysian context, solutions and the agreed action record (Q4), and creativity of solutions (Q5 protocols).
 
-It is a single `index.html` with no build step. The 3D scene (1,000 instanced "patient record" cubes that morph between shapes, with bloom) uses three.js r128 from cdnjs and jsDelivr, so it needs an internet connection; without it the slides still work without the moving background.
+It is a single `index.html` with no build step. The 3D scene (1,000 instanced "patient record" cubes that morph between shapes, with bloom, plus stylised low-poly stakeholder and patient figures that act out each scene) uses three.js r128 from cdnjs and jsDelivr, so it needs an internet connection; without it the slides still work without the moving background.
